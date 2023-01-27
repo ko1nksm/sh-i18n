@@ -64,7 +64,7 @@ Ken は 1 個のリンゴを持っています。
 $100 ドルは日本円でおそよ 13,000 円です。
 ```
 
-NOTE If it cannot be translated, the message catalog may need to be reworked.
+**NOTE:** If it cannot be translated, the message catalog may need to be reworked.
 
 ```sh
 msgfmt -o locale/ja/LC_MESSAGES/sh-gettext-example.mo po/ja.po
