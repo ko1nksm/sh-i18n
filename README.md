@@ -103,6 +103,18 @@ msgfmt -o locale/ja/LC_MESSAGES/sh-gettext-example.mo po/ja.po
 
 ## API
 
+- Functions
+  - [shgettext\_print ( \_ )](#shgettext_print--_-)
+  - [shgettext\_nprint ( \_n )](#shgettext_nprint--_n-)
+  - [shgettext\_gettext](#shgettext_gettext)
+  - [shgettext\_ngettext](#shgettext_ngettext)
+  - [shgettext\_printf](#shgettext_printf)
+  - [shgettext\_echo](#shgettext_echo)
+  - [shgettext\_detect\_decimal\_point](#shgettext_detect_decimal_point)
+- Environment Variables
+  - [SHGETTEXT\_GETTEXT, SHGETTEXT\_NGETTEXT](#shgettext_gettext-shgettext_ngettext)
+  - [SHGETTEXT\_PRINTF](#shgettext_printf-1)
+
 ### MSGID
 
 MSGID is the key used for translation. For example, `_ "Hello World"`, `_ 'Hello World'`, `_ $'Hello World'` would be the MSGID of the message `Hello World`. If no translation is found, the MSGID is output as is.
