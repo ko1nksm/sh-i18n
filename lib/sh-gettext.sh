@@ -190,7 +190,12 @@ shgettext_printf() {
   shgettext_work=${shgettext_work##*@}
   while [ "$shgettext_work" ]; do
     case $shgettext_work in
-      +*) set -- "$@" "${1%%[,.]*}$SHGETTEXT_DECIMALPOINT${1#*[,.]}" ;;
+      +*)
+        case $1 in
+          *[,.]*) set -- "$@" "${1%%[,.]*}$SHGETTEXT_DECIMALPOINT${1#*[,.]}" ;;
+          *) set -- "$@" "$1" ;;
+        esac
+        ;;
       *) set -- "$@" "$1" ;;
     esac
     shift
