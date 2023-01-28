@@ -77,7 +77,7 @@ Ken は 1 個のリンゴを持っています。
 
 ==== Using decimal separator ====
 地球から太陽までの距離は 149,597,870,000 km です。
-周率は 3.141593 です。
+円周率は 3.141593 です。
 
 ==== Use $'...' for msgid that begin with $. ====
 $100 ドルは日本円でおそよ 13,000 円です。
@@ -110,6 +110,7 @@ msgfmt -o locale/ja/LC_MESSAGES/sh-gettext-example.mo po/ja.po
   - [shgettext\_ngettext](#shgettext_ngettext)
   - [shgettext\_printf](#shgettext_printf)
   - [shgettext\_echo](#shgettext_echo)
+  - [shgettext\_replace\_all](#shgettext_replace_all)
   - [shgettext\_detect\_decimal\_point](#shgettext_detect_decimal_point)
 - Environment Variables
   - [SHGETTEXT\_GETTEXT, SHGETTEXT\_NGETTEXT](#shgettext_gettext-shgettext_ngettext)
@@ -250,6 +251,14 @@ $echo foo
 ```
 
 For more information on `$echo`, see [here](https://www.gnu.org/software/gettext/manual/html_node/gettext_002esh.html).
+
+### shgettext_replace_all
+
+```txt
+shgettext_replace_all VAR ARGUMENT SEARCH REPLACE
+```
+
+Replace all SEARCHs found in ARGUMENT with REPLACE and assign them to VAR variable.
 
 ### shgettext_detect_decimal_point
 
