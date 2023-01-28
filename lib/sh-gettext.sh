@@ -49,6 +49,16 @@ shgettext_setup() {
       IFS=" $IFS" && set -- "$*" && IFS=${IFS# }
       command print -r -- "${1:-}"
     }
+  elif [ "${ZSH_VERSION:-}" ]; then
+    shgettext__put() {
+      IFS=" $IFS" && set -- "$*" && IFS=${IFS# }
+      builtin printf '%s' "${1:-}"
+    }
+
+    shgettext__putln() {
+      IFS=" $IFS" && set -- "$*" && IFS=${IFS# }
+      builtin printf '%s\n' "${1:-}"
+    }
   else
     shgettext__put() {
       IFS=" $IFS" && set -- "$*" && IFS=${IFS# }
