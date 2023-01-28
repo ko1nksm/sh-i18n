@@ -35,8 +35,9 @@ _ $'Here is a tab =>\t<=.'
 _ $'It\047s a small world.\n' -n
 echo
 
-echo "==== Using decimal separator ===="
+echo "==== Locale-dependent numeric values ===="
 _ "The distance from the earth to the sun is %'d km." 149597870000
+_ "PI is %f." 3.1415926535
 echo
 
 echo "==== Use \$'...' for msgid that begin with \$. ===="
@@ -59,6 +60,7 @@ Ken は 1 個のリンゴを持っています。
 
 ==== Using decimal separator ====
 地球から太陽までの距離は 149,597,870,000 km です。
+周率は 3.141593 です。
 
 ==== Use $'...' for msgid that begin with $. ====
 $100 ドルは日本円でおそよ 13,000 円です。
