@@ -214,26 +214,10 @@ shgettext__printf_args_reorder() {
       set -- "$@" $((${7#"${7%%[!0]*}"}+0))
       if [ 1 -le "$8" ] && [ "$8" -le "$3" ]; then
         set -- "$1" "$2" "$3" "$4" "$5 \"\${$8}\"" "$6"
-
-        if shgettext__printf_format_is_flags_field shgettext_work "$2"; then
-          if ! shgettext__printf_is_decimal_separator_supported; then
-            set -- "$1" "$2" "$3" "$4" "$5" "$6" "$shgettext_work"
-            shgettext__replace_all shgettext_work "$7" "'" ""
-            set -- "$1" "$shgettext_work${2#"$7"}" "$3" "$4" "$5" "$6"
-          fi
-        fi
       else
         set -- "$1" "$2" "$3" "$4%$7\$" "$5" "$6"
       fi
       continue
-    fi
-
-    if shgettext__printf_format_is_flags_field shgettext_work "$2"; then
-      if ! shgettext__printf_is_decimal_separator_supported; then
-        set -- "$1" "$2" "$3" "$4" "$5" "$6" "$shgettext_work"
-        shgettext__replace_all shgettext_work "$7" "'" ""
-        set -- "$1" "$shgettext_work${2#"$7"}" "$3" "$4" "$5" "$6"
-      fi
     fi
 
     if [ "$6" -le "$3" ]; then
@@ -255,12 +239,6 @@ shgettext__printf_format_is_parameter_field() {
   eval "$1=\$3"
 }
 
-shgettext__printf_format_is_flags_field() {
-  set -- "$1" "$2" "${2%%[!-+ 0\'\#]*}"
-  [ "$3" ] || return 1
-  eval "$1=\$3"
-}
-
 shgettext__printf_format_manipulater() {
   set -- "$1" "$2%" '' '' ''
   while [ "$2" ]; do
@@ -271,7 +249,13 @@ shgettext__printf_format_manipulater() {
       *)
         case $2 in ([-+\ 0\'\#]*) # flags
           set -- "$1" "$2" "$3" "$4" "${2%%[!-+ 0\'\#]*}"
-          set -- "$1" "${2#"$5"}" "$3$5" "$4"
+          if shgettext__printf_is_decimal_separator_supported; then
+            set -- "$1" "${2#"$5"}" "$3$5" "$4"
+          else
+            shgettext__replace_all shgettext_work "$5" "'" ""
+            set -- "$1" "${2#"$5"}" "$3$shgettext_work" "$4"
+            unset shgettext_work
+          fi
         esac
         case $2 in ([0-9]*) # width
           set -- "$1" "$2" "$3" "$4" "${2%%[!0-9]*}"
