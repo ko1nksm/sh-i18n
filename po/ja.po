@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-27 21:04+0900\n"
+"POT-Creation-Date: 2023-01-28 10:52+0900\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -51,6 +51,10 @@ msgstr "世界は小さい。\n"
 msgid "The distance from the earth to the sun is %'d km."
 msgstr "地球から太陽までの距離は %'d km です。"
 
-#: example.sh:30
+#: example.sh:27
+msgid "PI is %f."
+msgstr "円周率は %f です。"
+
+#: example.sh:31
 msgid "$100 is about %'d Japanese yen."
 msgstr "$100 ドルは日本円でおそよ %'d 円です。"

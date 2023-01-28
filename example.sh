@@ -22,8 +22,9 @@ _ $'Here is a tab =>\t<=.'
 _ $'It\047s a small world.\n' -n
 echo
 
-echo "==== Using decimal separator ===="
+echo "==== Locale-dependent numeric values ===="
 _ "The distance from the earth to the sun is %'d km." 149597870000
+_ "PI is %f." 3.1415926535
 echo
 
 echo "==== Use \$'...' for msgid that begin with \$. ===="
