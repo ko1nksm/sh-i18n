@@ -61,12 +61,12 @@ shgettext_setup() {
     }
   fi
 
-  if [ "$(command printf -- x)" = 'x' ]; then
+  if [ "$(printf -- x)" = 'x' ]; then
     # shellcheck disable=SC2059
-    shgettext__native_printf() { command printf -- "$@"; }
+    shgettext__native_printf() { printf -- "$@"; }
   else
     # shellcheck disable=SC2059
-    shgettext__native_printf() { command printf "$@"; }
+    shgettext__native_printf() { printf "$@"; }
   fi
 
   shgettext__printf() {
