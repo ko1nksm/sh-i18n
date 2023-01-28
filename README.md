@@ -6,7 +6,24 @@ Fully portable gettext library for POSIX-compliant shell scripts.
 
 sh-gettext is an easy to use and highly portable internationalization library for shell scripts. It supports all POSIX-compliant shells and can run in any environment. It is based on the gettext API and only commands `gettext` and `ngettext` are required. These API and commands will be standardized in POSIX.1-2023 (Issue 8). sh-gettext works with OS standard commands. If these commands are not installed, fallback to work with default messages.
 
-This is an alternative library that aims to replace [`gettext.sh`](https://www.gnu.org/software/gettext/manual/html_node/sh.html). It is currently in beta release. We will try to maintain the specifications as much as possible, but may change them in the future.
+This is an alternative library that aims to replace [GNU `gettext.sh`](https://www.gnu.org/software/gettext/manual/html_node/sh.html). It is currently in beta release. We will try to maintain the specifications as much as possible, but may change them in the future.
+
+## sh-gettext vs GNU gettext.sh
+
+|                                                       | sh-gettext     | GNU gettext.sh              |
+| ----------------------------------------------------- | -------------- | --------------------------- |
+| Portability                                           | Fully portable | Depends on GNU gettext      |
+| Supported gettext implementation                      | All supported  | GNU gettext and compatibles |
+| POSIX shells (modern sh, dash, bash and others)       | All supported  | All supported (probably)    |
+| Bourne shell (obsolete sh)                            | No             | Yes (probably)              |
+| Use only POSIX (Issue 8) commands                     | Yes            | No (depends on `envsubst`)  |
+| Environment without `gettext` and `ngettext` commands | Works          | Does not work               |
+| Dollar-Single-Quotes (`$'...'`) for MSGID             | All supported  | Shell dependent             |
+| Parameter field (`%1$s`)                              | All supported  | Shell dependent             |
+| Locale-dependent number separator (`%'d`)             | All supported  | Shell dependent             |
+| Locale-dependent decimal point symbols (`.`, `,`)     | All supported  | Shell dependent             |
+| Shorthand                                             | `_`, `_n`      | Nothing                     |
+| Faster than GNU gettext.sh                            | Yes            | No                          |
 
 ## Tutorial
 
