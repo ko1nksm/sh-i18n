@@ -21,7 +21,7 @@ This is an alternative library that aims to replace [GNU `gettext.sh`](https://w
 | Dollar-Single-Quotes (`$'...'`) for MSGID             | All supported  | Shell dependent             |
 | Parameter field (`%1$s`)                              | All supported  | Shell dependent             |
 | Locale-dependent number separator (`%'d`)             | All supported  | Shell dependent             |
-| Locale-dependent decimal point symbols (`.`, `,`)     | All supported  | Shell dependent             |
+| Locale-dependent decimal point symbols (`.` `,` `٫`)  | All supported  | Shell dependent             |
 | Shorthand                                             | `_`, `_n`      | Nothing                     |
 | Faster than GNU gettext.sh                            | Yes            | No                          |
 
