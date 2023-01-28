@@ -86,6 +86,13 @@ shgettext_detect_decimal_point() {
   SHGETTEXT_DECIMALPOINT=${1:-1.0}
   SHGETTEXT_DECIMALPOINT=${SHGETTEXT_DECIMALPOINT#1}
   SHGETTEXT_DECIMALPOINT=${SHGETTEXT_DECIMALPOINT%0}
+
+  # Workaround for GNU printf <= 8.30
+  #   It outputs a locale-dependent decimal point symbol,
+  #   but cannot parse with a locale-dependent decimal point symbol.
+  if ! printf "%f" "$SHGETTEXT_DECIMALPOINT" 1.2 2>/dev/null; then
+    SHGETTEXT_DECIMALPOINT='.'
+  fi
 }
 shgettext_detect_decimal_point
 
