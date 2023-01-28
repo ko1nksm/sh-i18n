@@ -228,7 +228,6 @@ shgettext_printf FORMAT [ARGUMENT]...
 
 The values passed in ARGUMENT is expanded according to FORMAT. It internally executes the `printf` command and basically interprets the same format as the `printf` command, but with the following differences.
 
-- Do not interpret backslash escape sequences (only % format is interpreted)
 - Supports positional variable references with the format `<number>$`
 - Support for output grouping numbers by the `'` flag (e.g. `%'d`)
   - If the `printf` implementation does not support the `'` flag, it is ignored
