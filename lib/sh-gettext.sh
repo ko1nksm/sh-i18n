@@ -1,6 +1,6 @@
 # shellcheck shell=sh
 
-: "${SHGETTEXT_PRINTF:=}"
+: "${SHGETTEXT_PRINTF:=}" "${SHGETTEXT_DECIMALPOINT:=.}"
 : "${SHGETTEXT_GETTEXT:=gettext}" "${SHGETTEXT_NGETTEXT:=ngettext}"
 
 shgettext_setup() {
@@ -80,6 +80,14 @@ shgettext_setup() {
   fi
 }
 shgettext_setup
+
+shgettext_detect_decimal_point() {
+  set -- "$(printf "%1.1f" 1)" 2>/dev/null
+  SHGETTEXT_DECIMALPOINT=${1:-1.0}
+  SHGETTEXT_DECIMALPOINT=${SHGETTEXT_DECIMALPOINT#1}
+  SHGETTEXT_DECIMALPOINT=${SHGETTEXT_DECIMALPOINT%0}
+}
+shgettext_detect_decimal_point
 
 # shellcheck disable=SC3003
 if [ $':' = '$:' ]; then
@@ -176,6 +184,18 @@ fi
 shgettext_printf() {
   shgettext__printf_args_reorder shgettext_work "$1" $(($# - 1))
   eval "shift; set -- \"\${shgettext_work%@*}\" ${shgettext_work##*@}"
+  shgettext__printf_format_manipulater shgettext_work "${shgettext_work%@*}"
+  shift
+  set -- "$@" "${shgettext_work%@*}"
+  shgettext_work=${shgettext_work##*@}
+  while [ "$shgettext_work" ]; do
+    case $shgettext_work in
+      +*) set -- "$@" "${1%%[,.]*}$SHGETTEXT_DECIMALPOINT${1#*[,.]}" ;;
+      *) set -- "$@" "$1" ;;
+    esac
+    shift
+    shgettext_work=${shgettext_work#* }
+  done
   unset shgettext_work
   shgettext__printf "$@"
 }
@@ -239,6 +259,37 @@ shgettext__printf_format_is_flags_field() {
   set -- "$1" "$2" "${2%%[!-+ 0\'\#]*}"
   [ "$3" ] || return 1
   eval "$1=\$3"
+}
+
+shgettext__printf_format_manipulater() {
+  set -- "$1" "$2%" '' '' ''
+  while [ "$2" ]; do
+    set -- "$1" "${2#*\%}" "$3${2%%\%*}%" "$4"
+    case $2 in
+      '') continue ;;
+      %*) set -- "$1" "${2#%}" "$3%" "$4" && continue ;;
+      *)
+        case $2 in ([-+\ 0\'\#]*) # flags
+          set -- "$1" "$2" "$3" "$4" "${2%%[!-+ 0\'\#]*}"
+          set -- "$1" "${2#"$5"}" "$3$5" "$4"
+        esac
+        case $2 in ([0-9]*) # width
+          set -- "$1" "$2" "$3" "$4" "${2%%[!0-9]*}"
+          set -- "$1" "${2#"$5"}" "$3$5" "$4"
+        esac
+        case $2 in (.*) # precision
+          set -- "$1" "${2#.}" "$3." "$4"
+          set -- "$1" "$2" "$3" "$4" "${2%%[!0-9]*}"
+          set -- "$1" "${2#"$5"}" "$3$5" "$4"
+        esac
+        case $2 in # length + type
+          [fFeEgG]* | [hlL][fFeEgG]*) set -- "$1" "$2" "$3" "$4+ " ;;
+          *) set -- "$1" "$2" "$3" "$4- " ;;
+        esac
+        set -- "$1" "$2" "$3" "$4"
+    esac
+  done
+  eval "$1=\"\${3%\%}@\${4}\""
 }
 
 # shgettext_print MSGID [-n | --] [ARGUMENT]...

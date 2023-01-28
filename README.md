@@ -221,6 +221,14 @@ $echo foo
 
 For more information on `$echo`, see [here](https://www.gnu.org/software/gettext/manual/html_node/gettext_002esh.html).
 
+### shgettext_detect_decimal_point
+
+```txt
+shgettext_detect_decimal_point STRING
+```
+
+Re-detect locale-dependent decimal point symbols.
+
 ## Environment Variables
 
 ### SHGETTEXT_GETTEXT, SHGETTEXT_NGETTEXT
