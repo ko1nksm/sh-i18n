@@ -7,6 +7,9 @@ set -eu
 export TEXTDOMAIN="sh-gettext-example"
 export TEXTDOMAINDIR="${0%/*}/locale"
 
+# Used in some XSI-compliant environments (e.g. OpenIndiana)
+export NLSPATH="${0%/*}/locale/%l/LC_MESSAGES/%N.mo"
+
 echo "==== Basic ===="
 _ 'Hello World.'
 _ 'Hello, %s.' -- Ken
