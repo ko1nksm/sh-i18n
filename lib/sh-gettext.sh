@@ -45,32 +45,22 @@ shgettext_setup() {
   if [ "${KSH_VERSION:-}" ]; then
     shgettext__put() {
       IFS=" $IFS" && set -- "$*" && IFS=${IFS# }
-      command print -nr -- "${1:-}"
+      print -nr -- "${1:-}"
     }
 
     shgettext__putln() {
       IFS=" $IFS" && set -- "$*" && IFS=${IFS# }
-      command print -r -- "${1:-}"
-    }
-  elif [ "${ZSH_VERSION:-}" ]; then
-    shgettext__put() {
-      IFS=" $IFS" && set -- "$*" && IFS=${IFS# }
-      builtin printf '%s' "${1:-}"
-    }
-
-    shgettext__putln() {
-      IFS=" $IFS" && set -- "$*" && IFS=${IFS# }
-      builtin printf '%s\n' "${1:-}"
+      print -r -- "${1:-}"
     }
   else
     shgettext__put() {
       IFS=" $IFS" && set -- "$*" && IFS=${IFS# }
-      command printf '%s' "${1:-}"
+      printf '%s' "${1:-}"
     }
 
     shgettext__putln() {
       IFS=" $IFS" && set -- "$*" && IFS=${IFS# }
-      command printf '%s\n' "${1:-}"
+      printf '%s\n' "${1:-}"
     }
   fi
 
