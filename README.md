@@ -104,6 +104,15 @@ msgfmt -o locale/ja/LC_MESSAGES/sh-gettext-example.mo po/ja.po
 
 `gettext`, `ngettext`, `msgfmt`, and `xgettext` are standardized in POSIX.1-2023 (Issue 8).
 
+Shells that we have decided not to support due to shell bugs:
+
+- pdksh (v5.2.14 99/07/13.2), posh (0.14.1)
+  - bug: `set -- abc a; echo ${1#"$2"}` => falsely empty
+- ksh88 (Version M-11/16/88), ksh93 (Version JM 93t+ 2009-05-01)
+  - bug: "@: parameter not set" (It works if you don't `set -u`)
+- bash (2.04)
+  - bug: Segmentation fault
+
 ## API
 
 - Functions
