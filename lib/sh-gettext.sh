@@ -212,7 +212,10 @@ shgettext_printf() {
     case $shgettext_work in
       +*)
         case $1 in
-          *[,.]*) set -- "$@" "${1%%[,.]*}$SHGETTEXT_DECIMALPOINT${1#*[,.]}" ;;
+          # Arabic Decimal Separator U+066B (UTF-8: 0xD9 0xAB)
+          *٫*) set -- "$@" "${1%%٫*}$SHGETTEXT_DECIMALPOINT${1#*٫}" ;;
+          *,*) set -- "$@" "${1%%,*}$SHGETTEXT_DECIMALPOINT${1#*,}" ;;
+          *.*) set -- "$@" "${1%%.*}$SHGETTEXT_DECIMALPOINT${1#*.}" ;;
           *) set -- "$@" "$1" ;;
         esac
         ;;
