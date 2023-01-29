@@ -78,7 +78,7 @@ shgettext_setup() {
    "${SHGETTEXT_PRINTF:-shgettext__native_printf}" "$@"
   }
 
-  if shgettext__printf "%'d" 0 >/dev/null 2>&1; then
+  if [ "$(shgettext__printf "%'d" 0 2>/dev/null)" = 0 ]; then
     shgettext__printf_is_decimal_separator_supported() { true; }
   else
     shgettext__printf_is_decimal_separator_supported() { false; }
