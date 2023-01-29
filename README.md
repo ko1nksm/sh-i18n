@@ -109,8 +109,8 @@ msgfmt -o locale/ja/LC_MESSAGES/sh-gettext-example.mo po/ja.po
   - [shgettext\_gettext](#shgettext_gettext)
   - [shgettext\_ngettext](#shgettext_ngettext)
   - [shgettext\_printf](#shgettext_printf)
+  - [shgettext\_printfln](#shgettext_printfln)
   - [shgettext\_echo](#shgettext_echo)
-  - [shgettext\_replace\_all](#shgettext_replace_all)
   - [shgettext\_detect\_decimal\_point](#shgettext_detect_decimal_point)
 - Environment Variables
   - [SHGETTEXT\_GETTEXT, SHGETTEXT\_NGETTEXT](#shgettext_gettext-shgettext_ngettext)
@@ -229,11 +229,20 @@ shgettext_printf FORMAT [ARGUMENT]...
 
 The values passed in ARGUMENT is expanded according to FORMAT. It internally executes the `printf` command and basically interprets the same format as the `printf` command, but with the following differences.
 
+- Do not interpret backslash escape sequences (only % format is interpreted)
 - Supports positional variable references with the format `<number>$`
 - Support for output grouping numbers by the `'` flag (e.g. `%'d`)
   - If the `printf` implementation does not support the `'` flag, it is ignored
 - Arguments remaining after FORMAT consumes arguments are ignored
 - If the argument referenced by FORMAT does not exist, the format remains in place
+
+### shgettext_printfln
+
+```txt
+shgettext_printfln FORMAT [ARGUMENT]...
+```
+
+Same as `shgettext_printf` except for the addition of a newline at the end of the output.
 
 ### shgettext_echo
 
@@ -251,14 +260,6 @@ $echo foo
 ```
 
 For more information on `$echo`, see [here](https://www.gnu.org/software/gettext/manual/html_node/gettext_002esh.html).
-
-### shgettext_replace_all
-
-```txt
-shgettext_replace_all VAR ARGUMENT SEARCH REPLACE
-```
-
-Replace all SEARCHs found in ARGUMENT with REPLACE and assign them to VAR variable.
 
 ### shgettext_detect_decimal_point
 

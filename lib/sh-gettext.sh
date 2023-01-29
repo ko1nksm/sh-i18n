@@ -1,7 +1,9 @@
 # shellcheck shell=sh
 
-: "${SHGETTEXT_PRINTF:=}" "${SHGETTEXT_DECIMALPOINT:=.}"
+: "${SHGETTEXT_PRINTF:=}"
 : "${SHGETTEXT_GETTEXT:=gettext}" "${SHGETTEXT_NGETTEXT:=ngettext}"
+SHGETTEXT_DECIMALPOINT='. ' SHGETTEXT_LF='
+'
 
 shgettext_setup() {
   shgettext_work="${TEXTDOMAIN+x}${TEXTDOMAIN:-}"
@@ -13,7 +15,7 @@ shgettext_setup() {
     # Implementation without -E option.
     # Probably Solaris 10/11.
     shgettext__gettext() {
-      shgettext_replace_all shgettext_work "$1" "\\" "\\\\"
+      shgettext__replace_all shgettext_work "$1" "\\" "\\\\"
       set -- "$shgettext_work"
       unset shgettext_work
       "$SHGETTEXT_GETTEXT" -e "$1"
@@ -184,12 +186,12 @@ eval "$(shgettext__generate_unescape)"
 
 if (eval ": \"\${PPID//?/}\"") 2>/dev/null; then
   # Not POSIX shell compliant but fast
-  shgettext_replace_all() {
+  shgettext__replace_all() {
     eval "$1=\${2//\"\$3\"/\"\$4\"}"
   }
 else
   # For POSIX Shells
-  shgettext_replace_all() {
+  shgettext__replace_all() {
     set -- "$1" "$2$3" "$3" "$4" ""
     while [ "$2" ]; do
       set -- "$1" "${2#*"$3"}" "$3" "$4" "$5${2%%"$3"*}$4"
@@ -199,7 +201,8 @@ else
 fi
 
 shgettext_printf() {
-  shgettext__printf_args_reorder shgettext_work "$1" $(($# - 1))
+  shgettext__replace_all shgettext_work "$1" "\\" "\\\\"
+  shgettext__printf_args_reorder shgettext_work "$shgettext_work" $(($# - 1))
   eval "shift; set -- \"\${shgettext_work%@*}\" ${shgettext_work##*@}"
   shgettext__printf_format_manipulater shgettext_work "${shgettext_work%@*}"
   shift
@@ -220,6 +223,14 @@ shgettext_printf() {
   done
   unset shgettext_work
   shgettext__printf "$@"
+}
+
+shgettext_printfln() {
+  shgettext_work="${1}${SHGETTEXT_LF}"
+  shift
+  set -- "$shgettext_work" "$@"
+  unset shgettext_work
+  shgettext_printf "$@"
 }
 
 shgettext__printf_args_reorder() {
@@ -274,7 +285,7 @@ shgettext__printf_format_manipulater() {
           if shgettext__printf_is_decimal_separator_supported; then
             set -- "$1" "${2#"$5"}" "$3$5" "$4"
           else
-            shgettext_replace_all shgettext_work "$5" "'" ""
+            shgettext__replace_all shgettext_work "$5" "'" ""
             set -- "$1" "${2#"$5"}" "$3$shgettext_work" "$4"
             unset shgettext_work
           fi
@@ -301,14 +312,14 @@ shgettext__printf_format_manipulater() {
 # shgettext_print MSGID [-n | --] [ARGUMENT]...
 shgettext_print() {
   shgettext_work=$(shgettext_gettext "$1" && echo x)
-  shgettext_replace_all shgettext_work "${shgettext_work%x}" "\\" "\\\\"
+  shgettext_work=${shgettext_work%x}
   case ${2:-} in
-    -n) shift 2 && set -- "$shgettext_work" "$@" ;;
-    --) shift 2 && set -- "$shgettext_work\n" "$@" ;;
-     *) shift 1 && set -- "$shgettext_work\n" "$@" ;;
+    -n) shift 2 && set -- shgettext_printf "$shgettext_work" "$@" ;;
+    --) shift 2 && set -- shgettext_printfln "$shgettext_work" "$@" ;;
+     *) shift 1 && set -- shgettext_printfln "$shgettext_work" "$@" ;;
   esac
   unset shgettext_work
-  shgettext_printf "$@"
+  "$@"
 }
 
 # shgettext_nprint MSGID MSGID-PLURAL [-n | --] N [ARGUMENT]...
@@ -317,14 +328,14 @@ shgettext_nprint() {
     -n | --) shgettext_work=$(shgettext_ngettext "$1" "$2" "$4" && echo x) ;;
     *) shgettext_work=$(shgettext_ngettext "$1" "$2" "$3" && echo x) ;;
   esac
-  shgettext_replace_all shgettext_work "${shgettext_work%x}" "\\" "\\\\"
+  shgettext_work=${shgettext_work%x}
   case $3 in
-    -n) shift 3 && set -- "$shgettext_work" "$@" ;;
-    --) shift 3 && set -- "$shgettext_work\n" "$@" ;;
-     *) shift 2 && set -- "$shgettext_work\n" "$@" ;;
+    -n) shift 3 && set -- shgettext_printf "$shgettext_work" "$@" ;;
+    --) shift 3 && set -- shgettext_printfln "$shgettext_work" "$@" ;;
+     *) shift 2 && set -- shgettext_printfln "$shgettext_work" "$@" ;;
   esac
   unset shgettext_work
-  shgettext_printf "$@"
+  "$@"
 }
 
 # shgettext_echo STRING
