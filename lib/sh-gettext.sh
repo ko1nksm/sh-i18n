@@ -19,7 +19,9 @@ shgettext_setup() {
       shgettext__replace_all shgettext_work "$1" "\\" "\\\\"
       set -- "$shgettext_work"
       unset shgettext_work
-      "$SHGETTEXT_GETTEXT" -e "$1"
+      # Workaround for Solaris/OpenIndiana
+      # gettext returns exit status 1 if TEXTDOMAIN is empty
+      TEXTDOMAIN="${TEXTDOMAIN:--}" "$SHGETTEXT_GETTEXT" -e "$1"
     }
   else
     # gettext is not installed.
