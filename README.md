@@ -10,20 +10,20 @@ This is an alternative library that aims to replace [GNU `gettext.sh`](https://w
 
 ## sh-gettext vs GNU gettext.sh
 
-|                                                       | sh-gettext     | GNU gettext.sh              |
-| ----------------------------------------------------- | -------------- | --------------------------- |
-| Portability                                           | Fully portable | Depends on GNU gettext      |
-| Supported gettext implementation                      | All supported  | GNU gettext and compatibles |
-| POSIX shells (modern sh, dash, bash and others)       | All supported  | All supported (probably)    |
-| Bourne shell (obsolete sh)                            | No             | Yes (probably)              |
-| Use only POSIX (Issue 8) commands                     | Yes            | No (depends on `envsubst`)  |
-| Environment without `gettext` and `ngettext` commands | Works          | Does not work               |
-| Dollar-Single-Quotes (`$'...'`) for MSGID             | All supported  | Shell dependent             |
-| Parameter field (`%1$s`)                              | All supported  | Shell dependent             |
-| Locale-dependent number separator (`%'d`)             | All supported  | Shell dependent             |
-| Locale-dependent decimal point symbols (`.` `,` `٫`)  | All supported  | Shell dependent             |
-| Shorthand                                             | `_`, `_n`      | Nothing                     |
-| Faster than GNU gettext.sh                            | Yes            | No                          |
+|                                                      | sh-gettext       | GNU gettext.sh                |
+| ---------------------------------------------------- | ---------------- | ----------------------------- |
+| Portability                                          | ✅ Fully portable | Depends on GNU `gettext`      |
+| Supported `gettext` implementation                   | ✅ All supported  | GNU `gettext` and compatibles |
+| POSIX shells (modern sh, dash, bash and others)      | ✅ All supported  | ✅ All supported (probably)    |
+| Bourne shell (obsolete sh)                           | No               | ✅ Yes (probably)              |
+| Use only POSIX (Issue 8) commands                    | ✅ Yes            | No (depends on `envsubst`)    |
+| Environment without `gettext`, `ngettext` commands   | ✅ Works          | Does not work                 |
+| Dollar-Single-Quotes (`$'...'`) for MSGID            | ✅ All supported  | Shell dependent               |
+| Parameter field (`%1$s`)                             | ✅ All supported  | Shell dependent               |
+| Locale-dependent number separator (`%'d`)            | ✅ All supported  | Shell dependent               |
+| Locale-dependent decimal point symbols (`.` `,` `٫`) | ✅ All supported  | Shell dependent               |
+| Shorthand                                            | ✅ `_`, `_n`      | Nothing                       |
+| Faster than GNU gettext.sh                           | ✅ Yes            | No                            |
 
 ## Tutorial
 
