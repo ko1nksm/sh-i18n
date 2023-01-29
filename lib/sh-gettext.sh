@@ -7,6 +7,7 @@ SHGETTEXT_DECIMALPOINT='.' SHGETTEXT_LF='
 
 shgettext_setup() {
   shgettext_work="${TEXTDOMAIN+x}${TEXTDOMAIN:-}"
+  TEXTDOMAIN='-'
 
   if "$SHGETTEXT_GETTEXT" -E '' >/dev/null 2>&1; then
     # Probably GNU gettext or POSIX gettext.
