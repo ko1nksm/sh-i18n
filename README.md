@@ -223,14 +223,14 @@ If the fourth argument is `1`, MSGID is used as the message; if it is not `1`, M
 
 If the MSGID contains the `%` format, the arguments are expanded and the value passed in ARGUMENT is assigned. See `shgettext_printf` for about format.
 
-### shgettext_sprint ( _ )
+### shgettext_sprint ( s_ )
 
 ```txt
 s_ MSGID [-n | --] [ARGUMENT]...
 shgettext_sprint MSGID [-n | --] [ARGUMENT]...
 ```
 
-### shgettext_nsprint ( n_ )
+### shgettext_nsprint ( ns_ )
 
 ```txt
 ns_ MSGID MSGID-PLURAL [-n | --] N [ARGUMENT]...
