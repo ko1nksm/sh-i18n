@@ -118,21 +118,21 @@ Shells that we have decided not to support due to shell bugs:
 ## API
 
 - Functions
-  - [shgettext_print ( _ )](#shgettext_print--_-)
-  - [shgettext_nprint ( n_ )](#shgettext_nprint--n_-)
-  - [shgettext_sprint ( s_ )](#shgettext_sprint--s_-)
-  - [shgettext_nsprint ( ns_ )](#shgettext_nsprint--ns_-)
-  - [shgettext_gettext](#shgettext_gettext)
-  - [shgettext_ngettext](#shgettext_ngettext)
-  - [shgettext_sgettext](#shgettext_sgettext)
-  - [shgettext_nsgettext](#shgettext_nsgettext)
-  - [shgettext_printf](#shgettext_printf)
-  - [shgettext_printfln](#shgettext_printfln)
-  - [shgettext_echo](#shgettext_echo)
-  - [shgettext_detect_decimal_point](#shgettext_detect_decimal_point)
+  - [i18n_print ( _ )](#i18n_print--_-)
+  - [i18n_nprint ( n_ )](#i18n_nprint--n_-)
+  - [i18n_sprint ( s_ )](#i18n_sprint--s_-)
+  - [i18n_nsprint ( ns_ )](#i18n_nsprint--ns_-)
+  - [i18n_gettext](#i18n_gettext)
+  - [i18n_ngettext](#i18n_ngettext)
+  - [i18n_sgettext](#i18n_sgettext)
+  - [i18n_nsgettext](#i18n_nsgettext)
+  - [i18n_printf](#i18n_printf)
+  - [i18n_printfln](#i18n_printfln)
+  - [i18n_echo](#i18n_echo)
+  - [i18n_detect_decimal_point](#i18n_detect_decimal_point)
 - Environment Variables
-  - [SHGETTEXT_GETTEXT, SHGETTEXT_NGETTEXT](#shgettext_gettext-shgettext_ngettext)
-  - [SHGETTEXT_PRINTF](#shgettext_printf-1)
+  - [I18N_GETTEXT, I18N_NGETTEXT](#i18n_gettext-i18n_ngettext)
+  - [I18N_PRINTF](#i18n_printf-1)
 
 ### MSGID
 
@@ -195,80 +195,80 @@ _ $'It\047s a small world\n'
 
 Despite this limitation, we believe it is more convenient to make Dollar-Single-Quote available because messages often contain tabs and newlines.
 
-### shgettext_print ( _ )
+### i18n_print ( _ )
 
 ```txt
 _ MSGID [-n | --] [ARGUMENT]...
-shgettext_print MSGID [-n | --] [ARGUMENT]...
+i18n_print MSGID [-n | --] [ARGUMENT]...
 ```
 
-In many other programming languages, `_` is an alias for the `gettext` function, but in sh-gettext it is an alias for the `shgettext_print` shell function. The `shgettext_print` shell function performs variable expansion, similar to the `eval_gettext` shell function in `gettext.sh`.
+In many other programming languages, `_` is an alias for the `gettext` function, but in sh-gettext it is an alias for the `i18n_print` shell function. The `i18n_print` shell function performs variable expansion, similar to the `eval_gettext` shell function in `gettext.sh`.
 
 The second argument is a flag, specify `-n` or `--`. If `-n` is specified, suppresses output of trailing a newline. If `--` is specified, a newline is output. `--` is optional, but we recommend not omitting it given the possibility that the value of ARGUMENT is `--`.
 
-If the MSGID contains the `%` format, the arguments are expanded and the value passed in ARGUMENT is assigned. See `shgettext_printf` for about format.
+If the MSGID contains the `%` format, the arguments are expanded and the value passed in ARGUMENT is assigned. See `i18n_printf` for about format.
 
-### shgettext_nprint ( n_ )
+### i18n_nprint ( n_ )
 
 ```txt
 n_ MSGID MSGID-PLURAL [-n | --] N [ARGUMENT]...
-shgettext_nprint MSGID MSGID-PLURAL [-n | --] N [ARGUMENT]...
+i18n_nprint MSGID MSGID-PLURAL [-n | --] N [ARGUMENT]...
 ```
 
-Use `n_` to internationalize messages for plurals. It is an alias for the `shgettext_nprint` shell function. The `shgettext_nprint` shell function performs variable expansion, similar to the `eval_ngettext` shell function in `gettext.sh`.
+Use `n_` to internationalize messages for plurals. It is an alias for the `i18n_nprint` shell function. The `i18n_nprint` shell function performs variable expansion, similar to the `eval_ngettext` shell function in `gettext.sh`.
 
 The third argument is a flag, specify `-n` or `--`. If `-n` is specified, suppresses output of trailing a newline. If `--` is specified, a newline is output. `--` is optional. Since the next argument is numeric, `--` can safely be omitted.
 
 If the fourth argument is `1`, MSGID is used as the message; if it is not `1`, MSGID-PLURAL is used.
 
-If the MSGID contains the `%` format, the arguments are expanded and the value passed in ARGUMENT is assigned. See `shgettext_printf` for about format.
+If the MSGID contains the `%` format, the arguments are expanded and the value passed in ARGUMENT is assigned. See `i18n_printf` for about format.
 
-### shgettext_sprint ( s_ )
+### i18n_sprint ( s_ )
 
 ```txt
 s_ MSGID [-n | --] [ARGUMENT]...
-shgettext_sprint MSGID [-n | --] [ARGUMENT]...
+i18n_sprint MSGID [-n | --] [ARGUMENT]...
 ```
 
-### shgettext_nsprint ( ns_ )
+### i18n_nsprint ( ns_ )
 
 ```txt
 ns_ MSGID MSGID-PLURAL [-n | --] N [ARGUMENT]...
-shgettext_nsprint MSGID MSGID-PLURAL [-n | --] N [ARGUMENT]...
+i18n_nsprint MSGID MSGID-PLURAL [-n | --] N [ARGUMENT]...
 ```
 
-### shgettext_gettext
+### i18n_gettext
 
 ```txt
-shgettext_gettext VARNAME MSGID
+i18n_gettext VARNAME MSGID
 ```
 
 Get the specified MSGID and assign it to the variable specified by VARNAME. Options are not available and escape sequences are not interpreted　as with `gettext -E`.
 
-### shgettext_ngettext
+### i18n_ngettext
 
 ```txt
-shgettext_ngettext VARNAME MSGID MSGID-PLURAL N
+i18n_ngettext VARNAME MSGID MSGID-PLURAL N
 ```
 
 Get the specified MSGID and assign it to the variable specified by VARNAME. Options are not available and escape sequences are not interpreted　as with `ngettext -E`.
 
-### shgettext_sgettext
+### i18n_sgettext
 
 ```txt
-shgettext_sgettext VARNAME MSGID
+i18n_sgettext VARNAME MSGID
 ```
 
-### shgettext_nsgettext
+### i18n_nsgettext
 
 ```txt
-shgettext_nsgettext VARNAME MSGID MSGID-PLURAL N
+i18n_nsgettext VARNAME MSGID MSGID-PLURAL N
 ```
 
-### shgettext_printf
+### i18n_printf
 
 ```txt
-shgettext_printf FORMAT [ARGUMENT]...
+i18n_printf FORMAT [ARGUMENT]...
 ```
 
 The values passed in ARGUMENT is expanded according to FORMAT. It internally executes the `printf` command and basically interprets the same format as the `printf` command, but with the following differences.
@@ -280,18 +280,18 @@ The values passed in ARGUMENT is expanded according to FORMAT. It internally exe
 - Arguments remaining after FORMAT consumes arguments are ignored
 - If the argument referenced by FORMAT does not exist, the format remains in place
 
-### shgettext_printfln
+### i18n_printfln
 
 ```txt
-shgettext_printfln FORMAT [ARGUMENT]...
+i18n_printfln FORMAT [ARGUMENT]...
 ```
 
-Same as `shgettext_printf` except for the addition of a newline at the end of the output.
+Same as `i18n_printf` except for the addition of a newline at the end of the output.
 
-### shgettext_echo
+### i18n_echo
 
 ```txt
-shgettext_echo STRING
+i18n_echo STRING
 ```
 
 This function is provided as a transition from `gettext.sh`. Those who don't need it don't need to use it. It has the same functionality as the function set in `the $echo` variable of `gettext.sh`, outputting the first argument and newline and not interpreting backslash escape sequences.
@@ -299,40 +299,40 @@ This function is provided as a transition from `gettext.sh`. Those who don't nee
 If you want, you can have it do the equivalent of `$echo` by doing the following
 
 ```txt
-echo='shgettext_echo'
+echo='i18n_echo'
 $echo foo
 ```
 
 For more information on `$echo`, see [here](https://www.gnu.org/software/gettext/manual/html_node/gettext_002esh.html).
 
-### shgettext_detect_decimal_point
+### i18n_detect_decimal_point
 
 ```txt
-shgettext_detect_decimal_point STRING
+i18n_detect_decimal_point STRING
 ```
 
 Re-detect locale-dependent decimal point symbols.
 
 ## Environment Variables
 
-### SHGETTEXT_GETTEXT, SHGETTEXT_NGETTEXT
+### I18N_GETTEXT, I18N_NGETTEXT
 
 Set this environment variable if you want to use different implementations of `gettext` and `ngettext`. It must be set before loading `sh-gettext.sh`.
 
 ```sh
 if type ggettext >/dev/null 2>&1; then
-  SHGETTEXT_GETTEXT=ggettext
+  I18N_GETTEXT=ggettext
 fi
 
 . sh-gettext.sh
 ```
 
-### SHGETTEXT_PRINTF
+### I18N_PRINTF
 
 Set this environment variable if you want to use different implementations of `printf`. It must be set before loading `sh-gettext.sh`.
 
 ```sh
-SHGETTEXT_PRINTF=/usr/bin/printf
+I18N_PRINTF=/usr/bin/printf
 
 . sh-gettext.sh
 ```
@@ -349,8 +349,8 @@ xgettext -k_:1 -kn_:1,2 example.sh
 
 # To add all functions as keywords
 xgettext -k_:1 -kn_:1,2 -ks_:1 -kns_:1,2 \
-  -kshgettext_gettext:2 -kshgettext_ngettext:2,3 \
-  -kshgettext_sgettext:2 -kshgettext_nsgettext:2,3 \
+  -ki18n_gettext:2 -ki18n_ngettext:2,3 \
+  -ki18n_sgettext:2 -ki18n_nsgettext:2,3 \
   example.sh
 
 # In POSIX, -K option is standardized instead of -k option.
