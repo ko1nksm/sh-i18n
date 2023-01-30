@@ -118,21 +118,21 @@ Shells that we have decided not to support due to shell bugs:
 ## API
 
 - Functions
-  - [shgettext\_print ( \_ )](#shgettext_print--_-)
-  - [shgettext\_nprint ( \n_ )](#shgettext_nprint--n_-)
-  - [shgettext\_sprint ( \s_ )](#shgettext_print--_-)
-  - [shgettext\_nsprint ( \ns_ )](#shgettext_nprint--n_-)
-  - [shgettext\_gettext](#shgettext_gettext)
-  - [shgettext\_ngettext](#shgettext_ngettext)
-  - [shgettext\_sgettext](#shgettext_gettext)
-  - [shgettext\_nsgettext](#shgettext_ngettext)
-  - [shgettext\_printf](#shgettext_printf)
-  - [shgettext\_printfln](#shgettext_printfln)
-  - [shgettext\_echo](#shgettext_echo)
-  - [shgettext\_detect\_decimal\_point](#shgettext_detect_decimal_point)
+  - [shgettext_print ( _ )](#shgettext_print--_-)
+  - [shgettext_nprint ( n_ )](#shgettext_nprint--n_-)
+  - [shgettext_sprint ( s_ )](#shgettext_print--s_-)
+  - [shgettext_nsprint ( ns_ )](#shgettext_nprint--ns_-)
+  - [shgettext_gettext](#shgettext_gettext)
+  - [shgettext_ngettext](#shgettext_ngettext)
+  - [shgettext_sgettext](#shgettext_gettext)
+  - [shgettext_nsgettext](#shgettext_ngettext)
+  - [shgettext_printf](#shgettext_printf)
+  - [shgettext_printfln](#shgettext_printfln)
+  - [shgettext_echo](#shgettext_echo)
+  - [shgettext_detect_decimal_point](#shgettext_detect_decimal_point)
 - Environment Variables
-  - [SHGETTEXT\_GETTEXT, SHGETTEXT\_NGETTEXT](#shgettext_gettext-shgettext_ngettext)
-  - [SHGETTEXT\_PRINTF](#shgettext_printf-1)
+  - [SHGETTEXT_GETTEXT, SHGETTEXT_NGETTEXT](#shgettext_gettext-shgettext_ngettext)
+  - [SHGETTEXT_PRINTF](#shgettext_printf-1)
 
 ### MSGID
 
