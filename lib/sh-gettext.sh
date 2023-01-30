@@ -11,11 +11,11 @@ shgettext_setup() {
 
   if "$SHGETTEXT_GETTEXT" -E '' >/dev/null 2>&1; then
     # Probably GNU gettext or POSIX gettext.
-    shgettext__gettext() { "$SHGETTEXT_GETTEXT" -E "$1"; }
+    shgettext__native_gettext() { "$SHGETTEXT_GETTEXT" -E "$1"; }
   elif type "$SHGETTEXT_GETTEXT" >/dev/null 2>&1; then
     # Implementation without -E option.
     # Probably Solaris 10/11.
-    shgettext__gettext() {
+    shgettext__native_gettext() {
       shgettext__replace_all shgettext_work "$1" "\\" "\\\\"
       set -- "$shgettext_work"
       unset shgettext_work
@@ -25,15 +25,15 @@ shgettext_setup() {
     }
   else
     # gettext is not installed.
-    shgettext__gettext() { shgettext__put "$1"; }
+    shgettext__native_gettext() { shgettext__put "$1"; }
   fi
 
   if type "$SHGETTEXT_NGETTEXT" >/dev/null 2>&1; then
     # gettext is installed.
-    shgettext__ngettext() { "$SHGETTEXT_NGETTEXT" -E "$1" "$2" "$3"; }
+    shgettext__native_ngettext() { "$SHGETTEXT_NGETTEXT" -E "$1" "$2" "$3"; }
   else
     # gettext is not installed.
-    shgettext__ngettext() {
+    shgettext__native_ngettext() {
       [ "$3" = '1' ] || shift
       shgettext__put "$1"
     }
@@ -101,38 +101,65 @@ shgettext_detect_decimal_point() {
 }
 shgettext_detect_decimal_point
 
+shgettext__is_identifier() {
+  case $1 in ([a-zA-Z_]*)
+    case $1 in
+      *[!a-zA-Z0-9_]*) ;;
+      *) return 0
+    esac
+  esac
+  shgettext__putln "$1: not a valid identifier" >&2
+  return 1
+}
+
+shgettext__gettext() {
+  shgettext__is_identifier "$1" || return $?
+  shgettext_work=$(shgettext__native_gettext "$2" && echo x)
+  set -- "$1" "${shgettext_work%x}"
+  unset shgettext_work
+  eval "$1=\$2"
+}
+
+shgettext__ngettext() {
+  shgettext__is_identifier "$1" || return $?
+  shgettext_work=$(shgettext__native_ngettext "$2" "$3" "$4" && echo x)
+  set -- "$1" "${shgettext_work%x}"
+  unset shgettext_work
+  eval "$1=\$2"
+}
+
 # shellcheck disable=SC3003
 if [ $':' = '$:' ]; then
   # For shells not supporting $'...'
 
-  # shgettext_gettext MSGID
+  # shgettext_gettext VARNAME MSGID
   shgettext_gettext() {
-    case $1 in (\$*)
-      shgettext__unescape shgettext_work "${1#\$}"
-      set -- "$shgettext_work"
-    esac
-    unset shgettext_work
-    shgettext__gettext "$1"
-  }
-
-  # shgettext_ngettext MSGID MSGID-PLURAL N
-  shgettext_ngettext() {
-    case $1 in (\$*)
-      shgettext__unescape shgettext_work "${1#\$}"
-      set -- "$shgettext_work" "$2" "$3"
-      unset shgettext_work
-    esac
     case $2 in (\$*)
       shgettext__unescape shgettext_work "${2#\$}"
-      set -- "$1" "$shgettext_work" "$3"
+      set -- "$1" "$shgettext_work"
       unset shgettext_work
     esac
-    shgettext__ngettext "$1" "$2" "$3"
+    shgettext__gettext "$1" "$2"
+  }
+
+  # shgettext_ngettext VARNAME MSGID MSGID-PLURAL N
+  shgettext_ngettext() {
+    case $2 in (\$*)
+      shgettext__unescape shgettext_work "${2#\$}"
+      set -- "$1" "$shgettext_work" "$3" "$4"
+      unset shgettext_work
+    esac
+    case $3 in (\$*)
+      shgettext__unescape shgettext_work "${3#\$}"
+      set -- "$1" "$2" "$shgettext_work" "$4"
+      unset shgettext_work
+    esac
+    shgettext__ngettext "$1" "$2" "$3" "$4"
   }
 else
   # For shells supporting $'...'
-  shgettext_gettext() { shgettext__gettext "$1"; }
-  shgettext_ngettext() { shgettext__ngettext "$1" "$2" "$3"; }
+  shgettext_gettext() { shgettext__gettext "$1" "$2"; }
+  shgettext_ngettext() { shgettext__ngettext "$1" "$2" "$3" "$4"; }
 fi
 
 # shellcheck disable=SC2016
@@ -321,9 +348,9 @@ shgettext__print() {
 
 # shgettext_print MSGID [-n | --] [ARGUMENT]...
 shgettext_print() {
-  shgettext_work=$(shgettext_gettext "$1" && echo x)
+  shgettext_gettext shgettext_work "$1"
   shift
-  set -- "${shgettext_work%x}" "$@"
+  set -- "$shgettext_work" "$@"
   unset shgettext_work
   shgettext__print "$@"
 }
@@ -331,11 +358,11 @@ shgettext_print() {
 # shgettext_nprint MSGID MSGID-PLURAL [-n | --] N [ARGUMENT]...
 shgettext_nprint() {
   case $3 in
-    -n | --) shgettext_work=$(shgettext_ngettext "$1" "$2" "$4" && echo x) ;;
-    *) shgettext_work=$(shgettext_ngettext "$1" "$2" "$3" && echo x) ;;
+    -n | --) shgettext_ngettext shgettext_work "$1" "$2" "$4" ;;
+    *) shgettext_ngettext shgettext_work "$1" "$2" "$3" ;;
   esac
   shift 2
-  set -- "${shgettext_work%x}" "$@"
+  set -- "${shgettext_work}" "$@"
   unset shgettext_work
   shgettext__print "$@"
 }

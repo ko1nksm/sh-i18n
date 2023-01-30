@@ -219,18 +219,18 @@ If the MSGID contains the `%` format, the arguments are expanded and the value p
 ### shgettext_gettext
 
 ```txt
-shgettext_gettext MSGID
+shgettext_gettext VARNAME MSGID
 ```
 
-Equivalent to `gettext -E`. Options are not available and escape sequences are not interpreted.
+Get the specified MSGID and assign it to the variable specified by VARNAME. Options are not available and escape sequences are not interpreted　as with `gettext -E`.
 
 ### shgettext_ngettext
 
 ```txt
-shgettext_ngettext MSGID MSGID-PLURAL N
+shgettext_ngettext VARNAME MSGID MSGID-PLURAL N
 ```
 
-Equivalent to `ngettext -E`. Options are not available and escape sequences are not interpreted.
+Get the specified MSGID and assign it to the variable specified by VARNAME. Options are not available and escape sequences are not interpreted　as with `ngettext -E`.
 
 ### shgettext_printf
 
@@ -320,5 +320,5 @@ xgettext -k_:1 -kn_:1,2 -kshgettext_gettext:1 -kshgettext_ngettext:1,2 example.s
 # In POSIX, -K option is standardized instead of -k option.
 # (I don't know of any implementation that can use the -K option)
 xgettext -K _:1 -K n_:1,2 example.sh
-xgettext -K _:1 -K n_:1,2 -K shgettext_gettext:1 -K shgettext_ngettext:1,2 example.sh
+xgettext -K _:1 -K n_:1,2 -K shgettext_gettext:2 -K shgettext_ngettext:2,3 example.sh
 ```
