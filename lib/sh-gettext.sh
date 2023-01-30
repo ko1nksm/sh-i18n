@@ -305,10 +305,8 @@ shgettext__printf_format_manipulater() {
   eval "$1=\"\${3%\%}@\${4}\""
 }
 
-# shgettext_print MSGID [-n | --] [ARGUMENT]...
-shgettext_print() {
-  shgettext_work=$(shgettext_gettext "$1" && echo x)
-  shgettext_work=${shgettext_work%x}
+shgettext__print() {
+  shgettext_work=$1
   case ${2:-} in
     -n) shift 2 && set -- shgettext_printf "$shgettext_work" "$@" ;;
     --) shift 2 && set -- shgettext_printfln "$shgettext_work" "$@" ;;
@@ -318,20 +316,25 @@ shgettext_print() {
   "$@"
 }
 
+# shgettext_print MSGID [-n | --] [ARGUMENT]...
+shgettext_print() {
+  shgettext_work=$(shgettext_gettext "$1" && echo x)
+  shift
+  set -- "${shgettext_work%x}" "$@"
+  unset shgettext_work
+  shgettext__print "$@"
+}
+
 # shgettext_nprint MSGID MSGID-PLURAL [-n | --] N [ARGUMENT]...
 shgettext_nprint() {
   case $3 in
     -n | --) shgettext_work=$(shgettext_ngettext "$1" "$2" "$4" && echo x) ;;
     *) shgettext_work=$(shgettext_ngettext "$1" "$2" "$3" && echo x) ;;
   esac
-  shgettext_work=${shgettext_work%x}
-  case $3 in
-    -n) shift 3 && set -- shgettext_printf "$shgettext_work" "$@" ;;
-    --) shift 3 && set -- shgettext_printfln "$shgettext_work" "$@" ;;
-     *) shift 2 && set -- shgettext_printfln "$shgettext_work" "$@" ;;
-  esac
+  shift 2
+  set -- "${shgettext_work%x}" "$@"
   unset shgettext_work
-  "$@"
+  shgettext__print "$@"
 }
 
 # shgettext_echo STRING
