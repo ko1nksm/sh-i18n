@@ -120,12 +120,13 @@ if [ $':' = '$:' ]; then
     case $1 in (\$*)
       shgettext__unescape shgettext_work "${1#\$}"
       set -- "$shgettext_work" "$2" "$3"
+      unset shgettext_work
     esac
     case $2 in (\$*)
       shgettext__unescape shgettext_work "${2#\$}"
       set -- "$1" "$shgettext_work" "$3"
+      unset shgettext_work
     esac
-    unset shgettext_work
     shgettext__ngettext "$1" "$2" "$3"
   }
 else
