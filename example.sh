@@ -32,4 +32,12 @@ echo
 
 echo "==== Use \$'...' for msgid that begin with \$. ===="
 _ $'$100 is about %\047d Japanese yen.' $((100 * 130))
+echo
+
+echo "==== sgettext and nsgettext ===="
+s_ 'File|Path'
+s_ 'URL|Path'
+ns_ 'File|Path (%d)' 'Paths (%d)' 1
+ns_ 'URL|Path (%d)' 'Paths (%d)' 2
+echo
 

@@ -128,6 +128,24 @@ shgettext__ngettext() {
   eval "$1=\$2"
 }
 
+shgettext__sgettext() {
+  shgettext__is_identifier "$1" || return $?
+  shgettext_work=$(shgettext__native_gettext "$2" && echo x)
+  set -- "$1" "$2" "${shgettext_work%x}"
+  unset shgettext_work
+  [ "$2" = "$3" ] && set -- "$1" "$2" "${3##*|}"
+  eval "$1=\$3"
+}
+
+shgettext__nsgettext() {
+  shgettext__is_identifier "$1" || return $?
+  shgettext_work=$(shgettext__native_ngettext "$2" "$3" "$4" && echo x)
+  set -- "$1" "$2" "$3" "$4" "${shgettext_work%x}"
+  unset shgettext_work
+  [ "$2" = "$5" ] &&  set -- "$1" "$2" "$3" "$4" "${5##*|}"
+  eval "$1=\$5"
+}
+
 # shellcheck disable=SC3003
 if [ $':' = '$:' ]; then
   # For shells not supporting $'...'
@@ -156,10 +174,37 @@ if [ $':' = '$:' ]; then
     esac
     shgettext__ngettext "$1" "$2" "$3" "$4"
   }
+
+  # shgettext_gettext VARNAME MSGID
+  shgettext_sgettext() {
+    case $2 in (\$*)
+      shgettext__unescape shgettext_work "${2#\$}"
+      set -- "$1" "$shgettext_work"
+      unset shgettext_work
+    esac
+    shgettext__sgettext "$1" "$2"
+  }
+
+  # shgettext_nsgettext VARNAME MSGID MSGID-PLURAL N
+  shgettext_nsgettext() {
+    case $2 in (\$*)
+      shgettext__unescape shgettext_work "${2#\$}"
+      set -- "$1" "$shgettext_work" "$3" "$4"
+      unset shgettext_work
+    esac
+    case $3 in (\$*)
+      shgettext__unescape shgettext_work "${3#\$}"
+      set -- "$1" "$2" "$shgettext_work" "$4"
+      unset shgettext_work
+    esac
+    shgettext__nsgettext "$1" "$2" "$3" "$4"
+  }
 else
   # For shells supporting $'...'
   shgettext_gettext() { shgettext__gettext "$1" "$2"; }
   shgettext_ngettext() { shgettext__ngettext "$1" "$2" "$3" "$4"; }
+  shgettext_sgettext() { shgettext__sgettext "$1" "$2"; }
+  shgettext_nsgettext() { shgettext__nsgettext "$1" "$2" "$3" "$4"; }
 fi
 
 # shellcheck disable=SC2016
@@ -362,7 +407,28 @@ shgettext_nprint() {
     *) shgettext_ngettext shgettext_work "$1" "$2" "$3" ;;
   esac
   shift 2
-  set -- "${shgettext_work}" "$@"
+  set -- "$shgettext_work" "$@"
+  unset shgettext_work
+  shgettext__print "$@"
+}
+
+# shgettext_sprint MSGID [-n | --] [ARGUMENT]...
+shgettext_sprint() {
+  shgettext_sgettext shgettext_work "$1"
+  shift
+  set -- "$shgettext_work" "$@"
+  unset shgettext_work
+  shgettext__print "$@"
+}
+
+# shgettext_nsprint MSGID MSGID-PLURAL [-n | --] N [ARGUMENT]...
+shgettext_nsprint() {
+  case $3 in
+    -n | --) shgettext_nsgettext shgettext_work "$1" "$2" "$4" ;;
+    *) shgettext_nsgettext shgettext_work "$1" "$2" "$3" ;;
+  esac
+  shift 2
+  set -- "$shgettext_work" "$@"
   unset shgettext_work
   shgettext__print "$@"
 }
@@ -372,3 +438,5 @@ shgettext_echo() { shgettext__putln "$1"; }
 
 _() { shgettext_print "$@"; }
 n_() { shgettext_nprint "$@"; }
+s_() { shgettext_sprint "$@"; }
+ns_() { shgettext_nsprint "$@"; }

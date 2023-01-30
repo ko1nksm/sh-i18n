@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-28 10:52+0900\n"
+"POT-Creation-Date: 2023-01-30 21:47+0900\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,43 +18,63 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 
-#: example.sh:11
+#: example.sh:14
 msgid "Hello World."
 msgstr "こんにちは世界。"
 
-#: example.sh:12
+#: example.sh:15
 msgid "Hello, %s."
 msgstr "こんにちは、%s。"
 
-#: example.sh:16
+#: example.sh:19
 msgid "Here is %d apple."
 msgid_plural "Here are %d apples."
 msgstr[0] "ここに %d 個のリンゴがあります。"
 msgstr[1] "ここに %d 個のリンゴがあります。"
 
-#: example.sh:17
+#: example.sh:20
 #, sh-format
 msgid "%2$s has %1$d apple."
 msgid_plural "%2$s has %1$d apples."
 msgstr[0] "%2$s は %1$d 個のリンゴを持っています。"
 msgstr[1] "%2$s は %1$d 個のリンゴを持っています。"
 
-#: example.sh:21
+#: example.sh:24
 msgid "Here is a tab =>\t<=."
 msgstr "ここにはタブ =>\t<= があります。"
 
-#: example.sh:22
+#: example.sh:25
 msgid "It's a small world.\n"
 msgstr "世界は小さい。\n"
 
-#: example.sh:26
+#: example.sh:29
 msgid "The distance from the earth to the sun is %'d km."
 msgstr "地球から太陽までの距離は %'d km です。"
 
-#: example.sh:27
+#: example.sh:30
 msgid "PI is %f."
 msgstr "円周率は %f です。"
 
-#: example.sh:31
+#: example.sh:34
 msgid "$100 is about %'d Japanese yen."
 msgstr "$100 ドルは日本円でおそよ %'d 円です。"
+
+#: example.sh:38
+msgid "File|Path"
+msgstr "ファイルパス"
+
+#: example.sh:39
+msgid "URL|Path"
+msgstr "URLパス"
+
+#: example.sh:40
+msgid "File|Path (%d)"
+msgid_plural "Paths (%d)"
+msgstr[0] "ファイルパス (%d)"
+msgstr[1] "ファイルパス (%d)"
+
+#: example.sh:41
+msgid "URL|Path (%d)"
+msgid_plural "Paths (%d)"
+msgstr[0] "URLパス (%d)"
+msgstr[1] "URLパス (%d)"

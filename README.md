@@ -6,23 +6,26 @@ Fully portable gettext library for POSIX-compliant shell scripts.
 
 sh-gettext is an easy to use and highly portable internationalization library for shell scripts. It supports all POSIX-compliant shells and can run in any environment. It is based on the gettext API and only commands `gettext` and `ngettext` are required. These API and commands will be standardized in POSIX.1-2023 (Issue 8). sh-gettext works with OS standard commands. If these commands are not installed, fallback to work with default messages.
 
-This is an alternative library that aims to replace [GNU `gettext.sh`](https://www.gnu.org/software/gettext/manual/html_node/sh.html). It is currently in beta release. We will try to maintain the specifications as much as possible, but may change them in the future.
+This is an alternative library that aims to replace [GNU `gettext.sh`](https://www.gnu.org/software/gettext/manual/html_node/sh.html). It is currently in **beta release**. We will try to maintain the specifications as much as possible, but may change them in the future.
 
 ## sh-gettext vs GNU gettext.sh
 
-|                                                      | sh-gettext       | GNU gettext.sh                |
-| ---------------------------------------------------- | ---------------- | ----------------------------- |
-| Portability                                          | ✅ Fully portable | Depends on GNU `gettext`      |
-| POSIX shells (modern sh, dash, bash and others)      | ✅ All supported  | ✅ All supported (probably)    |
-| Bourne shell (obsolete sh)                           | No               | ✅ Yes (probably)              |
-| Use only POSIX (Issue 8) commands                    | ✅ Yes            | No (depends on `envsubst`)    |
-| Environment without `gettext`, `ngettext` commands   | ✅ Works          | Does not work                 |
-| Dollar-Single-Quotes (`$'...'`) for MSGID            | ✅ All supported  | Shell dependent               |
-| Parameter field (`%1$s`)                             | ✅ All supported  | Shell dependent               |
-| Locale-dependent number separator (`%'d`)            | ✅ All supported  | Shell dependent               |
-| Locale-dependent decimal point symbols (`.` `,` `٫`) | ✅ All supported  | Shell dependent               |
-| Shorthand                                            | ✅ `_`, `n_`      | Nothing                       |
-| Faster than GNU gettext.sh                           | ✅ Yes            | No                            |
+|                                                      | sh-gettext       | GNU gettext.sh             |
+| ---------------------------------------------------- | ---------------- | -------------------------- |
+| Portability                                          | ✅ Fully portable | Depends on GNU `gettext`   |
+| POSIX shells (modern sh, dash, bash and others)      | ✅ All supported  | ✅ All supported (probably) |
+| Bourne shell (obsolete sh)                           | No               | ✅ Yes (probably)           |
+| Use only POSIX (Issue 8) commands                    | ✅ Yes            | No (depends on `envsubst`) |
+| Environment without `gettext`, `ngettext` commands   | ✅ Works          | Does not work              |
+| Shorthand (`_`, `n_`, `s_`, `ns_`)                   | ✅ Available      | Nothing                    |
+| `gettext_noop`                                       | Work in progress | Nothing                    |
+| `pgettext`, `npgettext`                              | Work in progress | ✅ Available                |
+| `sgettext`, `nsgettext`                              | ✅ Available      | Nothing                    |
+| Dollar-Single-Quotes (`$'...'`) for MSGID            | ✅ All supported  | Shell dependent            |
+| Parameter field (`%1$s`)                             | ✅ All supported  | Shell dependent            |
+| Locale-dependent number separator (`%'d`)            | ✅ All supported  | Shell dependent            |
+| Locale-dependent decimal point symbols (`.` `,` `٫`) | ✅ All supported  | Shell dependent            |
+| Faster than GNU gettext.sh                           | ✅ Yes            | No                         |
 
 ## Tutorial
 
@@ -117,8 +120,12 @@ Shells that we have decided not to support due to shell bugs:
 - Functions
   - [shgettext\_print ( \_ )](#shgettext_print--_-)
   - [shgettext\_nprint ( \n_ )](#shgettext_nprint--n_-)
+  - [shgettext\_sprint ( \s_ )](#shgettext_print--_-)
+  - [shgettext\_nsprint ( \ns_ )](#shgettext_nprint--n_-)
   - [shgettext\_gettext](#shgettext_gettext)
   - [shgettext\_ngettext](#shgettext_ngettext)
+  - [shgettext\_sgettext](#shgettext_gettext)
+  - [shgettext\_nsgettext](#shgettext_ngettext)
   - [shgettext\_printf](#shgettext_printf)
   - [shgettext\_printfln](#shgettext_printfln)
   - [shgettext\_echo](#shgettext_echo)
@@ -216,6 +223,20 @@ If the fourth argument is `1`, MSGID is used as the message; if it is not `1`, M
 
 If the MSGID contains the `%` format, the arguments are expanded and the value passed in ARGUMENT is assigned. See `shgettext_printf` for about format.
 
+### shgettext_sprint ( _ )
+
+```txt
+s_ MSGID [-n | --] [ARGUMENT]...
+shgettext_sprint MSGID [-n | --] [ARGUMENT]...
+```
+
+### shgettext_nsprint ( n_ )
+
+```txt
+ns_ MSGID MSGID-PLURAL [-n | --] N [ARGUMENT]...
+shgettext_nsprint MSGID MSGID-PLURAL [-n | --] N [ARGUMENT]...
+```
+
 ### shgettext_gettext
 
 ```txt
@@ -231,6 +252,18 @@ shgettext_ngettext VARNAME MSGID MSGID-PLURAL N
 ```
 
 Get the specified MSGID and assign it to the variable specified by VARNAME. Options are not available and escape sequences are not interpreted　as with `ngettext -E`.
+
+### shgettext_sgettext
+
+```txt
+shgettext_sgettext VARNAME MSGID
+```
+
+### shgettext_nsgettext
+
+```txt
+shgettext_nsgettext VARNAME MSGID MSGID-PLURAL N
+```
 
 ### shgettext_printf
 
@@ -315,10 +348,12 @@ Since the messages to be translated are defined by keywords that differ from the
 xgettext -k_:1 -kn_:1,2 example.sh
 
 # To add all functions as keywords
-xgettext -k_:1 -kn_:1,2 -kshgettext_gettext:1 -kshgettext_ngettext:1,2 example.sh
+xgettext -k_:1 -kn_:1,2 -ks_:1 -kns_:1,2 \
+  -kshgettext_gettext:2 -kshgettext_ngettext:2,3 \
+  -kshgettext_sgettext:2 -kshgettext_nsgettext:2,3 \
+  example.sh
 
 # In POSIX, -K option is standardized instead of -k option.
 # (I don't know of any implementation that can use the -K option)
 xgettext -K _:1 -K n_:1,2 example.sh
-xgettext -K _:1 -K n_:1,2 -K shgettext_gettext:2 -K shgettext_ngettext:2,3 example.sh
 ```
