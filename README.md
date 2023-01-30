@@ -1,16 +1,16 @@
-# sh-gettext
+# sh-i18n
 
 Fully portable gettext library for POSIX-compliant shell scripts.
 
 ## Introduction
 
-sh-gettext is an easy to use and highly portable internationalization library for shell scripts. It supports all POSIX-compliant shells and can run in any environment. It is based on the gettext API and only commands `gettext` and `ngettext` are required. These API and commands will be standardized in POSIX.1-2023 (Issue 8). sh-gettext works with OS standard commands. If these commands are not installed, fallback to work with default messages.
+sh-i18n is an easy to use and highly portable internationalization library for shell scripts. It supports all POSIX-compliant shells and can run in any environment. It is based on the gettext API and only commands `gettext` and `ngettext` are required. These API and commands will be standardized in POSIX.1-2023 (Issue 8). sh-i18n works with OS standard commands. If these commands are not installed, fallback to work with default messages.
 
 This is an alternative library that aims to replace [GNU `gettext.sh`](https://www.gnu.org/software/gettext/manual/html_node/sh.html). It is currently in **beta release**. We will try to maintain the specifications as much as possible, but may change them in the future.
 
-## sh-gettext vs GNU gettext.sh
+## sh-i18n vs GNU gettext.sh
 
-|                                                      | sh-gettext       | GNU gettext.sh             |
+|                                                      | sh-i18n          | GNU gettext.sh             |
 | ---------------------------------------------------- | ---------------- | -------------------------- |
 | Portability                                          | ✅ Fully portable | Depends on GNU `gettext`   |
 | POSIX shells (modern sh, dash, bash and others)      | ✅ All supported  | ✅ All supported (probably) |
@@ -91,7 +91,7 @@ $100 ドルは日本円でおそよ 13,000 円です。
 **NOTE:** If it cannot be translated, the message catalog may need to be reworked.
 
 ```sh
-msgfmt -o locale/ja/LC_MESSAGES/sh-gettext-example.mo po/ja.po
+msgfmt -o locale/ja/LC_MESSAGES/sh-i18n.mo po/ja.po
 ```
 
 ## Requirements
@@ -148,7 +148,7 @@ _ "Hello$(printf '\t')World"
 
 `$'...'` is a shell feature called "Dollar-Single-Quotes" that will be standardized in POSIX Issue 8. When newlines or tabs are included in A `$'...'`, it can be written with escape sequences like `$'FOO\tBAR\n'`.
 
-Dollar-Single-Quotes is a feature that is already available in many shells, such as bash, but not yet in dash. However, sh-gettext implements a workaround so that Dollar-Single-Quotes can be used in shells that do not support Dollar-Single-Quotes as far as MSGID is concerned (The feature does not make Dollar-Single-Quote available to the entire shell script). If Dollar-Single-Quotes is not used, it could be written as follows, but it would be difficult to read.
+Dollar-Single-Quotes is a feature that is already available in many shells, such as bash, but not yet in dash. However, sh-i18n implements a workaround so that Dollar-Single-Quotes can be used in shells that do not support Dollar-Single-Quotes as far as MSGID is concerned (The feature does not make Dollar-Single-Quote available to the entire shell script). If Dollar-Single-Quotes is not used, it could be written as follows, but it would be difficult to read.
 
 ```sh
 _ 'Hello	World' # It contains a tab character
@@ -160,7 +160,7 @@ _ $'Hello\tWorld\n' # Legible
 
 #### Dollar-Single-Quotes Limitations
 
-sh-gettext has the unique feature of being able to use Dollar-Single-Quotes with MSGID, which is useful for including tabs and newlines in messages. However, the following Limitations are made so that shells that support Dollar-Single-Quotes and shells that do not support Dollar-Single-Quotes can be written in the same way.
+sh-i18n has the unique feature of being able to use Dollar-Single-Quotes with MSGID, which is useful for including tabs and newlines in messages. However, the following Limitations are made so that shells that support Dollar-Single-Quotes and shells that do not support Dollar-Single-Quotes can be written in the same way.
 
 **If the first character of the MSGID is `$`, it cannot be written as `'MSGID'` or `"MSGID"`.** If the first character is `$`, you must write `$'$ is dollar'`. This is because shells that do not support dollar-single quoting use the leading `$` to determine whether to interpret backslash escape sequences.
 
@@ -202,7 +202,7 @@ _ MSGID [-n | --] [ARGUMENT]...
 i18n_print MSGID [-n | --] [ARGUMENT]...
 ```
 
-In many other programming languages, `_` is an alias for the `gettext` function, but in sh-gettext it is an alias for the `i18n_print` shell function. The `i18n_print` shell function performs variable expansion, similar to the `eval_gettext` shell function in `gettext.sh`.
+In many other programming languages, `_` is an alias for the `gettext` function, but in sh-i18n it is an alias for the `i18n_print` shell function. The `i18n_print` shell function performs variable expansion, similar to the `eval_gettext` shell function in `gettext.sh`.
 
 The second argument is a flag, specify `-n` or `--`. If `-n` is specified, suppresses output of trailing a newline. If `--` is specified, a newline is output. `--` is optional, but we recommend not omitting it given the possibility that the value of ARGUMENT is `--`.
 
@@ -317,24 +317,24 @@ Re-detect locale-dependent decimal point symbols.
 
 ### I18N_GETTEXT, I18N_NGETTEXT
 
-Set this environment variable if you want to use different implementations of `gettext` and `ngettext`. It must be set before loading `sh-gettext.sh`.
+Set this environment variable if you want to use different implementations of `gettext` and `ngettext`. It must be set before loading `i18n.sh`.
 
 ```sh
 if type ggettext >/dev/null 2>&1; then
   I18N_GETTEXT=ggettext
 fi
 
-. sh-gettext.sh
+. i18n.sh
 ```
 
 ### I18N_PRINTF
 
-Set this environment variable if you want to use different implementations of `printf`. It must be set before loading `sh-gettext.sh`.
+Set this environment variable if you want to use different implementations of `printf`. It must be set before loading `i18n.sh`.
 
 ```sh
 I18N_PRINTF=/usr/bin/printf
 
-. sh-gettext.sh
+. i18n.sh
 ```
 
 ## Notes on using the xgettext command
