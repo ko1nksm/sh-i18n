@@ -2,7 +2,7 @@
 
 set -eu
 
-. "${0%/*}/lib/sh-i18n.sh"
+. "${0%/*}/lib/i18n.sh"
 
 export TEXTDOMAIN="sh-i18n"
 export TEXTDOMAINDIR="${0%/*}/locale"

@@ -34,9 +34,9 @@ This is an alternative library that aims to replace [GNU `gettext.sh`](https://w
 
 set -eu
 
-. "${0%/*}/lib/sh-gettext.sh"
+. "${0%/*}/lib/i18n.sh"
 
-export TEXTDOMAIN="sh-gettext-example"
+export TEXTDOMAIN="sh-i18n"
 export TEXTDOMAINDIR="${0%/*}/locale"
 
 # Used in some XSI-compliant environments (e.g. OpenIndiana)
