@@ -193,6 +193,7 @@ else
   }
 fi
 
+# shgettext_printf FORMAT [ARGUMENT]...
 shgettext_printf() {
   shgettext__replace_all shgettext_work "$1" "\\" "\\\\"
   shgettext__printf_args_reorder shgettext_work "$shgettext_work" $(($# - 1))
@@ -221,6 +222,7 @@ shgettext_printf() {
   shgettext__printf "$@"
 }
 
+# shgettext_printfln FORMAT [ARGUMENT]...
 shgettext_printfln() {
   shgettext_work="${1}${SHGETTEXT_LF}"
   shift
@@ -337,7 +339,7 @@ shgettext_nprint() {
   shgettext__print "$@"
 }
 
-# shgettext_echo STRING
+# shgettext_echo ARGUMENT
 shgettext_echo() { shgettext__putln "$1"; }
 
 _() { shgettext_print "$@"; }
