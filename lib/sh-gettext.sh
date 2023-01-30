@@ -338,4 +338,4 @@ shgettext_nprint() {
 shgettext_echo() { shgettext__putln "$1"; }
 
 _() { shgettext_print "$@"; }
-_n() { shgettext_nprint "$@"; }
+n_() { shgettext_nprint "$@"; }

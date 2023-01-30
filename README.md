@@ -21,7 +21,7 @@ This is an alternative library that aims to replace [GNU `gettext.sh`](https://w
 | Parameter field (`%1$s`)                             | ✅ All supported  | Shell dependent               |
 | Locale-dependent number separator (`%'d`)            | ✅ All supported  | Shell dependent               |
 | Locale-dependent decimal point symbols (`.` `,` `٫`) | ✅ All supported  | Shell dependent               |
-| Shorthand                                            | ✅ `_`, `_n`      | Nothing                       |
+| Shorthand                                            | ✅ `_`, `n_`      | Nothing                       |
 | Faster than GNU gettext.sh                           | ✅ Yes            | No                            |
 
 ## Tutorial
@@ -45,8 +45,8 @@ _ 'Hello, %s.' -- Ken
 echo
 
 echo "==== Plural forms ===="
-_n 'Here is %d apple.' 'Here are %d apples.' 2
-_n '%2$s has %1$d apple.' '%2$s has %1$d apples.' 1 Ken
+n_ 'Here is %d apple.' 'Here are %d apples.' 2
+n_ '%2$s has %1$d apple.' '%2$s has %1$d apples.' 1 Ken
 echo
 
 echo "==== Using backslash escape sequences ===="
@@ -116,7 +116,7 @@ Shells that we have decided not to support due to shell bugs:
 
 - Functions
   - [shgettext\_print ( \_ )](#shgettext_print--_-)
-  - [shgettext\_nprint ( \_n )](#shgettext_nprint--_n-)
+  - [shgettext\_nprint ( \n_ )](#shgettext_nprint--n_-)
   - [shgettext\_gettext](#shgettext_gettext)
   - [shgettext\_ngettext](#shgettext_ngettext)
   - [shgettext\_printf](#shgettext_printf)
@@ -201,14 +201,14 @@ The second argument is a flag, specify `-n` or `--`. If `-n` is specified, suppr
 
 If the MSGID contains the `%` format, the arguments are expanded and the value passed in ARGUMENT is assigned. See `shgettext_printf` for about format.
 
-### shgettext_nprint ( _n )
+### shgettext_nprint ( n_ )
 
 ```txt
-_n MSGID MSGID-PLURAL [-n | --] N [ARGUMENT]...
+n_ MSGID MSGID-PLURAL [-n | --] N [ARGUMENT]...
 shgettext_nprint MSGID MSGID-PLURAL [-n | --] N [ARGUMENT]...
 ```
 
-Use `_n` to internationalize messages for plurals. It is an alias for the `shgettext_nprint` shell function. The `shgettext_nprint` shell function performs variable expansion, similar to the `eval_ngettext` shell function in `gettext.sh`.
+Use `n_` to internationalize messages for plurals. It is an alias for the `shgettext_nprint` shell function. The `shgettext_nprint` shell function performs variable expansion, similar to the `eval_ngettext` shell function in `gettext.sh`.
 
 The third argument is a flag, specify `-n` or `--`. If `-n` is specified, suppresses output of trailing a newline. If `--` is specified, a newline is output. `--` is optional. Since the next argument is numeric, `--` can safely be omitted.
 
@@ -311,14 +311,14 @@ To create a message catalog, see [here](https://www.gnu.org/software/gettext/man
 Since the messages to be translated are defined by keywords that differ from the standard, an option to add the keywords must be specified.
 
 ```sh
-# To add only _ and _n as keywords
-xgettext -k_:1 -k_n:1,2 example.sh
+# To add only _ and n_ as keywords
+xgettext -k_:1 -kn_:1,2 example.sh
 
 # To add all functions as keywords
-xgettext -k_:1 -k_n:1,2 -kshgettext_gettext:1 -kshgettext_ngettext:1,2 example.sh
+xgettext -k_:1 -kn_:1,2 -kshgettext_gettext:1 -kshgettext_ngettext:1,2 example.sh
 
 # In POSIX, -K option is standardized instead of -k option.
 # (I don't know of any implementation that can use the -K option)
-xgettext -K _:1 -K _n:1,2 example.sh
-xgettext -K _:1 -K _n:1,2 -K shgettext_gettext:1 -K shgettext_ngettext:1,2 example.sh
+xgettext -K _:1 -K n_:1,2 example.sh
+xgettext -K _:1 -K n_:1,2 -K shgettext_gettext:1 -K shgettext_ngettext:1,2 example.sh
 ```

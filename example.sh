@@ -16,8 +16,8 @@ _ 'Hello, %s.' -- Ken
 echo
 
 echo "==== Plural forms ===="
-_n 'Here is %d apple.' 'Here are %d apples.' 2
-_n '%2$s has %1$d apple.' '%2$s has %1$d apples.' 1 Ken
+n_ 'Here is %d apple.' 'Here are %d apples.' 2
+n_ '%2$s has %1$d apple.' '%2$s has %1$d apples.' 1 Ken
 echo
 
 echo "==== Using backslash escape sequences ===="
