@@ -147,7 +147,7 @@ i18n__nsgettext() {
   i18n_work=$(i18n__native_ngettext "$2" "$3" "$4" && echo x)
   set -- "$1" "$2" "$3" "$4" "${i18n_work%x}"
   unset i18n_work
-  [ "$2" = "$5" ] &&  set -- "$1" "$2" "$3" "$4" "${5##*|}"
+  [ "$2" = "$5" ] && set -- "$1" "$2" "$3" "$4" "${5##*|}"
   eval "$1=\$5"
 }
 
@@ -177,6 +177,7 @@ i18n__generate_gettext_apis() {
 
   if [ $':' = '$:' ]; then
     # For shells not supporting $'...'
+    # shellcheck disable=SC2016
     make() {
       i18n__putln "$1() {"
       args '  set --' "$2"
