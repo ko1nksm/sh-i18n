@@ -183,92 +183,59 @@ i18n__npgettext() {
 }
 
 # shellcheck disable=SC3003
-if [ $':' = '$:' ]; then
-  # For shells not supporting $'...'
+i18n__generate_gettext_apis() {
+  args() {
+    set -- "$1" "$2:" 1
+    while [ "$2" ]; do
+      set -- "$1 \"\$$3\"" "${2#*:}" $(($3 + 1))
+    done
+    i18n__putln "$1"
+  }
+
+  if [ $':' = '$:' ]; then
+    # For shells not supporting $'...'
+    make() {
+      i18n__putln "$1() {"
+      args '  set --' "$2"
+      set -- "$1" "$2:"
+      while [ "$2" ]; do
+        set -- "$1" "${2#*:}" "${2%%:*}"
+        case $3 in (MSGID)
+          i18n__putln '  case $1 in (\$*)'
+          i18n__putln '    i18n__unescape i18n_work "${1#\$}"'
+          i18n__putln '    shift'
+          i18n__putln '    set -- "$i18n_work" "$@"'
+          i18n__putln '    unset i18n_work'
+          i18n__putln '  esac'
+        esac
+        i18n__putln '  set -- "$@" "$1" && shift'
+      done
+      i18n__putln "  i18n__${1#*_} \"\$@\""
+      i18n__putln '}'
+    }
+  else
+    # For shells supporting $'...'
+    make() {
+      i18n__putln "$1() {"
+      args "  i18n__${1#*_}" "$2"
+      i18n__putln '}'
+    }
+  fi
 
   # i18n_gettext VARNAME MSGID
-  i18n_gettext() {
-    case $2 in (\$*)
-      i18n__unescape i18n_work "${2#\$}"
-      set -- "$1" "$i18n_work"
-      unset i18n_work
-    esac
-    i18n__gettext "$1" "$2"
-  }
-
+  make i18n_gettext VARNAME:MSGID
   # i18n_ngettext VARNAME MSGID MSGID-PLURAL N
-  i18n_ngettext() {
-    case $2 in (\$*)
-      i18n__unescape i18n_work "${2#\$}"
-      set -- "$1" "$i18n_work" "$3" "$4"
-      unset i18n_work
-    esac
-    case $3 in (\$*)
-      i18n__unescape i18n_work "${3#\$}"
-      set -- "$1" "$2" "$i18n_work" "$4"
-      unset i18n_work
-    esac
-    i18n__ngettext "$1" "$2" "$3" "$4"
-  }
-
+  make i18n_ngettext VARNAME:MSGID:MSGID:N
   # i18n_sgettext VARNAME MSGID
-  i18n_sgettext() {
-    case $2 in (\$*)
-      i18n__unescape i18n_work "${2#\$}"
-      set -- "$1" "$i18n_work"
-      unset i18n_work
-    esac
-    i18n__sgettext "$1" "$2"
-  }
-
+  make i18n_sgettext VARNAME:MSGID
   # i18n_nsgettext VARNAME MSGID MSGID-PLURAL N
-  i18n_nsgettext() {
-    case $2 in (\$*)
-      i18n__unescape i18n_work "${2#\$}"
-      set -- "$1" "$i18n_work" "$3" "$4"
-      unset i18n_work
-    esac
-    case $3 in (\$*)
-      i18n__unescape i18n_work "${3#\$}"
-      set -- "$1" "$2" "$i18n_work" "$4"
-      unset i18n_work
-    esac
-    i18n__nsgettext "$1" "$2" "$3" "$4"
-  }
-
+  make i18n_nsgettext VARNAME:MSGID:MSGID:N
   # i18n_pgettext VARNAME MSGCTXT MSGID
-  i18n_pgettext() {
-    case $2 in (\$*)
-      i18n__unescape i18n_work "${2#\$}"
-      set -- "$1" "$i18n_work"
-      unset i18n_work
-    esac
-    i18n__sgettext "$1" "$2"
-  }
-
+  make i18n_pgettext VARNAME:MSGCTXT:MSGID
   # i18n_npgettext VARNAME MSGCTXT MSGID MSGID-PLURAL N
-  i18n_npgettext() {
-    case $3 in (\$*)
-      i18n__unescape i18n_work "${3#\$}"
-      set -- "$1" "$2" "$i18n_work" "$4" "$5"
-      unset i18n_work
-    esac
-    case $4 in (\$*)
-      i18n__unescape i18n_work "${4#\$}"
-      set -- "$1" "$2" "$3" "$i18n_work" "$5"
-      unset i18n_work
-    esac
-    i18n__npgettext "$1" "$2" "$3" "$4" "$5"
-  }
-else
-  # For shells supporting $'...'
-  i18n_gettext() { i18n__gettext "$1" "$2"; }
-  i18n_ngettext() { i18n__ngettext "$1" "$2" "$3" "$4"; }
-  i18n_sgettext() { i18n__sgettext "$1" "$2"; }
-  i18n_nsgettext() { i18n__nsgettext "$1" "$2" "$3" "$4"; }
-  i18n_pgettext() { i18n__pgettext "$1" "$2" "$3"; }
-  i18n_npgettext() { i18n__npgettext "$1" "$2" "$3" "$4" "$5"; }
-fi
+  make i18n_npgettext VARNAME:MSGCTXT:MSGID:MSGID:N
+}
+eval "$(i18n__generate_gettext_apis)"
 
 # shellcheck disable=SC2016
 i18n__generate_unescape() {
