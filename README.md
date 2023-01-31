@@ -117,26 +117,24 @@ Shells that we have decided not to support due to shell bugs:
 
 ## API
 
-- Functions
-  - [i18n_print ( _ )](#i18n_print--_-)
-  - [i18n_nprint ( n_ )](#i18n_nprint--n_-)
-  - [i18n_sprint ( s_ )](#i18n_sprint--s_-)
-  - [i18n_nsprint ( ns_ )](#i18n_nsprint--ns_-)
-  - [i18n_pprint ( p_ )](#i18n_pprint--p_-)
-  - [i18n_npprint ( np_ )](#i18n_npprint--np_-)
-  - [i18n_gettext](#i18n_gettext)
-  - [i18n_ngettext](#i18n_ngettext)
-  - [i18n_sgettext](#i18n_sgettext)
-  - [i18n_nsgettext](#i18n_nsgettext)
-  - [i18n_pgettext](#i18n_pgettext)
-  - [i18n_npgettext](#i18n_npgettext)
-  - [i18n_printf](#i18n_printf)
-  - [i18n_printfln](#i18n_printfln)
-  - [i18n_echo](#i18n_echo)
-  - [i18n_detect_decimal_point](#i18n_detect_decimal_point)
-- Environment Variables
-  - [I18N_GETTEXT, I18N_NGETTEXT](#i18n_gettext-i18n_ngettext)
-  - [I18N_PRINTF](#i18n_printf-1)
+Functions
+
+| Basic                                   | Context (p)                                 | (s)                                         |
+| --------------------------------------- | ------------------------------------------- | ------------------------------------------- |
+| [i18n_print ( _ )](#i18n_print--_-)     | [i18n_pprint ( p_ )](#i18n_pprint--p_-)     | [i18n_sprint ( s_ )](#i18n_sprint--s_-)     |
+| [i18n_nprint ( n_ )](#i18n_nprint--n_-) | [i18n_npprint ( np_ )](#i18n_npprint--np_-) | [i18n_nsprint ( ns_ )](#i18n_nsprint--ns_-) |
+| [i18n_gettext](#i18n_gettext)           | [i18n_pgettext](#i18n_pgettext)             | [i18n_sgettext](#i18n_sgettext)             |
+| [i18n_ngettext](#i18n_ngettext)         | [i18n_npgettext](#i18n_npgettext)           | [i18n_nsgettext](#i18n_nsgettext)           |
+
+- [i18n_printf](#i18n_printf)
+- [i18n_printfln](#i18n_printfln)
+- [i18n_echo](#i18n_echo)
+- [i18n_detect_decimal_point](#i18n_detect_decimal_point)
+
+Environment Variables
+
+- [I18N_GETTEXT, I18N_NGETTEXT](#i18n_gettext-i18n_ngettext)
+- [I18N_PRINTF](#i18n_printf-1)
 
 ### MSGID
 
