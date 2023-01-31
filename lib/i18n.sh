@@ -5,45 +5,65 @@
 I18N_DECIMALPOINT='.' I18N_LF='
 '
 
-i18n_setup() {
+i18n_setup_gettext() {
   i18n_work="${TEXTDOMAIN+x}${TEXTDOMAIN:-}"
   TEXTDOMAIN='-'
 
-  if "$I18N_GETTEXT" -E '' >/dev/null 2>&1; then
-    # Probably GNU gettext or POSIX gettext.
-    i18n__native_gettext() { "$I18N_GETTEXT" -E "$1"; }
-  elif type "$I18N_GETTEXT" >/dev/null 2>&1; then
-    # Implementation without -E option.
-    # Probably Solaris 10/11.
-    i18n__native_gettext() {
-      i18n__replace_all i18n_work "$1" "\\" "\\\\"
-      set -- "$i18n_work"
-      unset i18n_work
-      # Workaround for Solaris/OpenIndiana
-      # gettext returns exit status 1 if TEXTDOMAIN is empty
-      TEXTDOMAIN="${TEXTDOMAIN:--}" "$I18N_GETTEXT" -e "$1"
-    }
-  else
-    # gettext is not installed.
-    i18n__native_gettext() { i18n__put "$1"; }
+  # Fallback when gettext is not available
+  i18n__native_gettext() { i18n__put "$1"; }
+  i18n__native_pgettext() { i18n__put "$2"; }
+
+  if type "$I18N_GETTEXT" >/dev/null 2>&1; then
+    # gettext is available
+    if "$I18N_GETTEXT" -E '' >/dev/null 2>&1; then
+      # Probably GNU gettext or POSIX gettext.
+      i18n__native_gettext() {
+        "$I18N_GETTEXT" -E ${2+-c "$2"} "$1"
+      }
+    else
+      # Implementation without -E option.
+      # Probably Solaris 10/11.
+      i18n__native_gettext() {
+        i18n__replace_all i18n_work "$1" "\\" "\\\\"
+        set -- "$i18n_work"
+        unset i18n_work
+        # Workaround for Solaris/OpenIndiana
+        # gettext returns exit status 1 if TEXTDOMAIN is empty
+        TEXTDOMAIN="${TEXTDOMAIN:--}" "$I18N_GETTEXT" -e ${2+-c "$2"} "$1"
+      }
+    fi
+
+    if "$I18N_GETTEXT" -c '' '' >/dev/null 2>&1; then
+      i18n__native_pgettext() { i18n__native_gettext "$2" "$1"; }
+    fi
   fi
 
+  # Fallback when ngettext is not available
+  i18n__native_ngettext() {
+    [ "$3" = '1' ] || shift
+    i18n__put "$1"
+  }
+  i18n__native_npgettext() { shift && i18n__native_ngettext "$@"; }
+
   if type "$I18N_NGETTEXT" >/dev/null 2>&1; then
-    # gettext is installed.
-    i18n__native_ngettext() { "$I18N_NGETTEXT" -E "$1" "$2" "$3"; }
-  else
-    # gettext is not installed.
+    # ngettext is available
     i18n__native_ngettext() {
-      [ "$3" = '1' ] || shift
-      i18n__put "$1"
+      "$I18N_NGETTEXT" -E ${4+-c "$4"} "$1" "$2" "$3"
     }
+
+    if "$I18N_NGETTEXT" -c '' '' '' '' >/dev/null 2>&1; then
+      i18n__native_npgettext() { i18n__native_ngettext "$2" "$3" "$4" "$1"; }
+    fi
   fi
 
   case $i18n_work in
     ?) TEXTDOMAIN=${i18n_work#x} ;;
     *) unset TEXTDOMAIN ;;
   esac
+}
+i18n_setup_gettext
 
+i18n_setup_printf() {
   if [ "${KSH_VERSION:-}" ]; then
     i18n__put() {
       IFS=" $IFS" && set -- "$*" && IFS=${IFS# }
@@ -84,7 +104,7 @@ i18n_setup() {
     i18n__printf_is_decimal_separator_supported() { false; }
   fi
 }
-i18n_setup
+i18n_setup_printf
 
 i18n_detect_decimal_point() {
   set -- "$(printf "%1.1f" 1)" 2>/dev/null
@@ -146,6 +166,22 @@ i18n__nsgettext() {
   eval "$1=\$5"
 }
 
+i18n__pgettext() {
+  i18n__is_identifier "$1" || return $?
+  i18n_work=$(i18n__native_pgettext "$2" "$3" && echo x)
+  set -- "$1" "${i18n_work%x}"
+  unset i18n_work
+  eval "$1=\$2"
+}
+
+i18n__npgettext() {
+  i18n__is_identifier "$1" || return $?
+  i18n_work=$(i18n__native_npgettext "$2" "$3" "$4" "$5" && echo x)
+  set -- "$1" "${i18n_work%x}"
+  unset i18n_work
+  eval "$1=\$2"
+}
+
 # shellcheck disable=SC3003
 if [ $':' = '$:' ]; then
   # For shells not supporting $'...'
@@ -175,7 +211,7 @@ if [ $':' = '$:' ]; then
     i18n__ngettext "$1" "$2" "$3" "$4"
   }
 
-  # i18n_gettext VARNAME MSGID
+  # i18n_sgettext VARNAME MSGID
   i18n_sgettext() {
     case $2 in (\$*)
       i18n__unescape i18n_work "${2#\$}"
@@ -199,12 +235,39 @@ if [ $':' = '$:' ]; then
     esac
     i18n__nsgettext "$1" "$2" "$3" "$4"
   }
+
+  # i18n_pgettext VARNAME MSGCTXT MSGID
+  i18n_pgettext() {
+    case $2 in (\$*)
+      i18n__unescape i18n_work "${2#\$}"
+      set -- "$1" "$i18n_work"
+      unset i18n_work
+    esac
+    i18n__sgettext "$1" "$2"
+  }
+
+  # i18n_npgettext VARNAME MSGCTXT MSGID MSGID-PLURAL N
+  i18n_npgettext() {
+    case $3 in (\$*)
+      i18n__unescape i18n_work "${3#\$}"
+      set -- "$1" "$2" "$i18n_work" "$4" "$5"
+      unset i18n_work
+    esac
+    case $4 in (\$*)
+      i18n__unescape i18n_work "${4#\$}"
+      set -- "$1" "$2" "$3" "$i18n_work" "$5"
+      unset i18n_work
+    esac
+    i18n__npgettext "$1" "$2" "$3" "$4" "$5"
+  }
 else
   # For shells supporting $'...'
   i18n_gettext() { i18n__gettext "$1" "$2"; }
   i18n_ngettext() { i18n__ngettext "$1" "$2" "$3" "$4"; }
   i18n_sgettext() { i18n__sgettext "$1" "$2"; }
   i18n_nsgettext() { i18n__nsgettext "$1" "$2" "$3" "$4"; }
+  i18n_pgettext() { i18n__pgettext "$1" "$2" "$3"; }
+  i18n_npgettext() { i18n__npgettext "$1" "$2" "$3" "$4" "$5"; }
 fi
 
 # shellcheck disable=SC2016
@@ -433,6 +496,27 @@ i18n_nsprint() {
   i18n__print "$@"
 }
 
+# i18n_pprint MSGCTXT MSGID [-n | --] [ARGUMENT]...
+i18n_pprint() {
+  i18n_pgettext i18n_work "$1" "$2"
+  shift
+  set -- "$i18n_work" "$@"
+  unset i18n_work
+  i18n__print "$@"
+}
+
+# i18n_npprint MSGCTXT MSGID MSGID-PLURAL [-n | --] N [ARGUMENT]...
+i18n_npprint() {
+  case $3 in
+    -n | --) i18n_npgettext i18n_work "$1" "$2" "$3" "$5" ;;
+    *) i18n_npgettext i18n_work "$1" "$2" "$3" "$4" ;;
+  esac
+  shift 3
+  set -- "$i18n_work" "$@"
+  unset i18n_work
+  i18n__print "$@"
+}
+
 # i18n_echo ARGUMENT
 i18n_echo() { i18n__putln "$1"; }
 
@@ -440,3 +524,5 @@ _() { i18n_print "$@"; }
 n_() { i18n_nprint "$@"; }
 s_() { i18n_sprint "$@"; }
 ns_() { i18n_nsprint "$@"; }
+p_() { i18n_pprint "$@"; }
+np_() { i18n_npprint "$@"; }

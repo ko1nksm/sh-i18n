@@ -78,3 +78,28 @@ msgid "URL|Path (%d)"
 msgid_plural "Paths (%d)"
 msgstr[0] "URLパス (%d)"
 msgstr[1] "URLパス (%d)"
+
+#: example.sh:45
+msgctxt "File"
+msgid "Path"
+msgstr "ファイルパス"
+
+#: example.sh:46
+msgctxt "URL"
+msgid "Path"
+msgstr "URLパス"
+
+#: example.sh:47
+msgctxt "File"
+msgid "Path (%d)"
+msgid_plural "Paths (%d)"
+msgstr[0] "ファイルパス (%d)"
+msgstr[1] "ファイルパス (%d)"
+
+#: example.sh:48
+msgctxt "URL"
+msgid "Path (%d)"
+msgid_plural "Paths (%d)"
+msgstr[0] "URLパス (%d)"
+msgstr[1] "URLパス (%d)"
+

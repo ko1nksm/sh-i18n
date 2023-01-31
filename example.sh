@@ -41,3 +41,10 @@ ns_ 'File|Path (%d)' 'Paths (%d)' 1
 ns_ 'URL|Path (%d)' 'Paths (%d)' 2
 echo
 
+echo "==== pgettext and npgettext ===="
+p_ 'File' 'Path'
+p_ 'URL' 'Path'
+np_ 'File' 'Path (%d)' 'Paths (%d)' 1
+np_ 'URL' 'Path (%d)' 'Paths (%d)' 2
+echo
+

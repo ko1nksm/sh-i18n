@@ -19,8 +19,8 @@ This is an alternative library that aims to replace [GNU `gettext.sh`](https://w
 | Environment without `gettext`, `ngettext` commands   | ✅ Works          | Does not work              |
 | Shorthand (`_`, `n_`, `s_`, `ns_`)                   | ✅ Available      | Nothing                    |
 | `gettext_noop`                                       | Work in progress | Nothing                    |
-| `pgettext`, `npgettext`                              | Work in progress | ✅ Available                |
 | `sgettext`, `nsgettext`                              | ✅ Available      | Nothing                    |
+| `pgettext`, `npgettext` (GNU gettext extensions)     | ✅ Available      | ✅ Available                |
 | Dollar-Single-Quotes (`$'...'`) for MSGID            | ✅ All supported  | Shell dependent            |
 | Parameter field (`%1$s`)                             | ✅ All supported  | Shell dependent            |
 | Locale-dependent number separator (`%'d`)            | ✅ All supported  | Shell dependent            |
@@ -122,10 +122,14 @@ Shells that we have decided not to support due to shell bugs:
   - [i18n_nprint ( n_ )](#i18n_nprint--n_-)
   - [i18n_sprint ( s_ )](#i18n_sprint--s_-)
   - [i18n_nsprint ( ns_ )](#i18n_nsprint--ns_-)
+  - [i18n_pprint ( p_ )](#i18n_pprint--p_-)
+  - [i18n_npprint ( np_ )](#i18n_npprint--np_-)
   - [i18n_gettext](#i18n_gettext)
   - [i18n_ngettext](#i18n_ngettext)
   - [i18n_sgettext](#i18n_sgettext)
   - [i18n_nsgettext](#i18n_nsgettext)
+  - [i18n_pgettext](#i18n_pgettext)
+  - [i18n_npgettext](#i18n_npgettext)
   - [i18n_printf](#i18n_printf)
   - [i18n_printfln](#i18n_printfln)
   - [i18n_echo](#i18n_echo)
@@ -265,6 +269,18 @@ i18n_sgettext VARNAME MSGID
 i18n_nsgettext VARNAME MSGID MSGID-PLURAL N
 ```
 
+### i18n_pgettext
+
+```txt
+i18n_pgettext VARNAME MSGCTXT MSGID
+```
+
+### i18n_npgettext
+
+```txt
+i18n_npgettext VARNAME MSGCTXT MSGID MSGID-PLURAL N
+```
+
 ### i18n_printf
 
 ```txt
@@ -348,9 +364,10 @@ Since the messages to be translated are defined by keywords that differ from the
 xgettext -k_:1 -kn_:1,2 example.sh
 
 # To add all functions as keywords
-xgettext -k_:1 -kn_:1,2 -ks_:1 -kns_:1,2 \
+xgettext -k_:1 -kn_:1,2 -ks_:1 -kns_:1,2 -kp_:1c,2 -knp_:1c,2,3 \
   -ki18n_gettext:2 -ki18n_ngettext:2,3 \
   -ki18n_sgettext:2 -ki18n_nsgettext:2,3 \
+  -ki18n_pgettext:2c,3 -ki18n_nsgettext:2c,3,4 \
   example.sh
 
 # In POSIX, -K option is standardized instead of -k option.
