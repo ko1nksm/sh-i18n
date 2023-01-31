@@ -241,6 +241,20 @@ ns_ MSGID MSGID-PLURAL [-n | --] N [ARGUMENT]...
 i18n_nsprint MSGID MSGID-PLURAL [-n | --] N [ARGUMENT]...
 ```
 
+### i18n_pprint ( p_ )
+
+```txt
+p_ MSGCTXT MSGID [-n | --] [ARGUMENT]...
+i18n_pprint MSGCTXT MSGID [-n | --] [ARGUMENT]...
+```
+
+### i18n_npprint ( np_ )
+
+```txt
+np_ MSGCTXT MSGID MSGID-PLURAL [-n | --] N [ARGUMENT]...
+i18n_npprint MSGCTXT MSGID MSGID-PLURAL [-n | --] N [ARGUMENT]...
+```
+
 ### i18n_gettext
 
 ```txt
