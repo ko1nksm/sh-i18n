@@ -17,8 +17,8 @@ This is an alternative library that aims to replace [GNU `gettext.sh`](https://w
 | Bourne shell (obsolete sh)                           | No               | ✅ Yes (probably)           |
 | Use only POSIX (Issue 8) commands                    | ✅ Yes            | No (depends on `envsubst`) |
 | Environment without `gettext`, `ngettext` commands   | ✅ Works          | Does not work              |
-| Shorthand (`_`, `n_`, `s_`, `ns_`)                   | ✅ Available      | Nothing                    |
-| `gettext_noop`                                       | Work in progress | Nothing                    |
+| Shorthand (`_`, `n_`, `s_`, `ns_`, `p_`, `np_`)      | ✅ Available      | Nothing                    |
+| `gettext_noop` (`N_`)                                | Work in progress | Nothing                    |
 | `sgettext`, `nsgettext`                              | ✅ Available      | Nothing                    |
 | `pgettext`, `npgettext` (GNU gettext extensions)     | ✅ Available      | ✅ Available                |
 | Dollar-Single-Quotes (`$'...'`) for MSGID            | ✅ All supported  | Shell dependent            |
@@ -367,7 +367,7 @@ xgettext -k_:1 -kn_:1,2 example.sh
 xgettext -k_:1 -kn_:1,2 -ks_:1 -kns_:1,2 -kp_:1c,2 -knp_:1c,2,3 \
   -ki18n_gettext:2 -ki18n_ngettext:2,3 \
   -ki18n_sgettext:2 -ki18n_nsgettext:2,3 \
-  -ki18n_pgettext:2c,3 -ki18n_nsgettext:2c,3,4 \
+  -ki18n_pgettext:2c,3 -ki18n_npgettext:2c,3,4 \
   example.sh
 
 # In POSIX, -K option is standardized instead of -k option.
