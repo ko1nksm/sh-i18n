@@ -121,19 +121,7 @@ i18n_detect_decimal_point() {
 }
 i18n_detect_decimal_point
 
-i18n__is_identifier() {
-  case $1 in ([a-zA-Z_]*)
-    case $1 in
-      *[!a-zA-Z0-9_]*) ;;
-      *) return 0
-    esac
-  esac
-  i18n__putln "$1: not a valid identifier" >&2
-  return 1
-}
-
 i18n__gettext() {
-  i18n__is_identifier "$1" || return $?
   i18n_work=$(i18n__native_gettext "$2" && echo x)
   set -- "$1" "${i18n_work%x}"
   unset i18n_work
@@ -141,7 +129,6 @@ i18n__gettext() {
 }
 
 i18n__ngettext() {
-  i18n__is_identifier "$1" || return $?
   i18n_work=$(i18n__native_ngettext "$2" "$3" "$4" && echo x)
   set -- "$1" "${i18n_work%x}"
   unset i18n_work
@@ -149,7 +136,6 @@ i18n__ngettext() {
 }
 
 i18n__sgettext() {
-  i18n__is_identifier "$1" || return $?
   i18n_work=$(i18n__native_gettext "$2" && echo x)
   set -- "$1" "$2" "${i18n_work%x}"
   unset i18n_work
@@ -158,7 +144,6 @@ i18n__sgettext() {
 }
 
 i18n__nsgettext() {
-  i18n__is_identifier "$1" || return $?
   i18n_work=$(i18n__native_ngettext "$2" "$3" "$4" && echo x)
   set -- "$1" "$2" "$3" "$4" "${i18n_work%x}"
   unset i18n_work
@@ -167,7 +152,6 @@ i18n__nsgettext() {
 }
 
 i18n__pgettext() {
-  i18n__is_identifier "$1" || return $?
   i18n_work=$(i18n__native_pgettext "$2" "$3" && echo x)
   set -- "$1" "${i18n_work%x}"
   unset i18n_work
@@ -175,7 +159,6 @@ i18n__pgettext() {
 }
 
 i18n__npgettext() {
-  i18n__is_identifier "$1" || return $?
   i18n_work=$(i18n__native_npgettext "$2" "$3" "$4" "$5" && echo x)
   set -- "$1" "${i18n_work%x}"
   unset i18n_work
