@@ -18,7 +18,7 @@ This is an alternative library that aims to replace [GNU `gettext.sh`](https://w
 | Use only POSIX (Issue 8) commands                    | ✅ Yes            | No (depends on `envsubst`) |
 | Environment without `gettext`, `ngettext` commands   | ✅ Works          | Does not work              |
 | Shorthand (`_`, `n_`, `s_`, `ns_`, `p_`, `np_`)      | ✅ Available      | Nothing                    |
-| `gettext_noop` (`N_`)                                | Work in progress | Nothing                    |
+| `gettext_noop` (`N_`) and similar                    | ✅ Available      | Nothing                    |
 | `sgettext`, `nsgettext`                              | ✅ Available      | Nothing                    |
 | `pgettext`, `npgettext` (GNU gettext extensions)     | ✅ Available      | ✅ Available                |
 | Dollar-Single-Quotes (`$'...'`) for MSGID            | ✅ All supported  | Shell dependent            |
@@ -117,7 +117,7 @@ Shells that we have decided not to support due to shell bugs:
 
 ## API
 
-Functions
+Gettext Functions
 
 | Basic                                   | Context (p)                                 | Scope (s)                                   |
 | --------------------------------------- | ------------------------------------------- | ------------------------------------------- |
@@ -125,6 +125,18 @@ Functions
 | [i18n_nprint ( n_ )](#i18n_nprint--n_-) | [i18n_npprint ( np_ )](#i18n_npprint--np_-) | [i18n_nsprint ( ns_ )](#i18n_nsprint--ns_-) |
 | [i18n_gettext](#i18n_gettext)           | [i18n_pgettext](#i18n_pgettext)             | [i18n_sgettext](#i18n_sgettext)             |
 | [i18n_ngettext](#i18n_ngettext)         | [i18n_npgettext](#i18n_npgettext)           | [i18n_nsgettext](#i18n_nsgettext)           |
+
+Gettext Helper (experimental)
+
+- i18n_gettext_noop (`N_`)
+- i18n_gettext_s2v (`S_`)
+- i18n_gettext_a2v (`V_`)
+- i18n_gettext_a2a (`A_`)
+- i18n_gettext_a2aa (`AA_`)
+- `i18n_set_array`
+- `@_`
+
+Utilities
 
 - [i18n_printf](#i18n_printf)
 - [i18n_printfln](#i18n_printfln)
@@ -372,14 +384,19 @@ To create a message catalog, see [here](https://www.gnu.org/software/gettext/man
 Since the messages to be translated are defined by keywords that differ from the standard, an option to add the keywords must be specified.
 
 ```sh
-# To add only _ and n_ as keywords
-xgettext -k_:1 -kn_:1,2 example.sh
-
-# To add all functions as keywords
+# To add only shorthands as keywords
 xgettext -k_:1 -kn_:1,2 -ks_:1 -kns_:1,2 -kp_:1c,2 -knp_:1c,2,3 \
+  -kN_ -kS_:2 -k@_ -kV_ -kA_ -kAA_:2 example.sh
+
+# To add all shorthands and functions as keywords
+xgettext \
+  -k_:1 -kn_:1,2 -ks_:1 -kns_:1,2 -kp_:1c,2 -knp_:1c,2,3 \
+  -kN_ -kS_:2 -k@_ -kV_ -kA_ -kAA_:2 \
   -ki18n_gettext:2 -ki18n_ngettext:2,3 \
   -ki18n_sgettext:2 -ki18n_nsgettext:2,3 \
-  -ki18n_pgettext:2c,3 -ki18n_npgettext:2c,3,4 \
+  -ki18n_pgettext:2c,3 -ki18n_nsgettext:2c,3,4 \
+  -ki18n_gettext_noop -ki18n_gettext_s2v:2 \
+  -ki18n_gettext_a2v -ki18n_gettext_a2a -ki18n_gettext_a2aa:2 \
   example.sh
 
 # In POSIX, -K option is standardized instead of -k option.

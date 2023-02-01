@@ -63,6 +63,35 @@ i18n_setup_gettext() {
 }
 i18n_setup_gettext
 
+i18n_build_array() {
+  I18N_ARRAY_NAME=$1
+}
+
+i18n_gettext_noop() {
+  i18n__put "$1"
+}
+
+i18n_gettext_s2v() {
+  eval "$1=\"\$2\""
+}
+
+i18n_gettext_a2v() {
+  set -- "$I18N_ARRAY_NAME" "$1"
+  i18n__replace_all i18n_work "$2" "'" "'\''"
+  eval "$1=\"\$$1 '\$i18n_work'\""
+  unset i18n_work
+}
+
+i18n_gettext_a2a() {
+  set -- "$I18N_ARRAY_NAME" "$1"
+  eval "$1=(\${$1[@]+\"\${$1[@]}\"} \"\$2\")"
+}
+
+i18n_gettext_a2aa() {
+  set -- "$I18N_ARRAY_NAME" "$1" "$2"
+  eval "${1}[\"\$2\"]=\"\$3\""
+}
+
 i18n_setup_printf() {
   if [ "${KSH_VERSION:-}" ]; then
     i18n__put() {
@@ -470,6 +499,14 @@ i18n_npprint() {
 
 # i18n_echo ARGUMENT
 i18n_echo() { i18n__putln "$1"; }
+
+N_() { i18n_gettext_noop "$@"; }
+S_() { i18n_gettext_s2v "$@"; }
+V_() { i18n_gettext_a2v "$@"; }
+A_() { i18n_gettext_a2a "$@"; }
+AA_() { i18n_gettext_a2aa "$@"; }
+alias @_='set -- "$@"'
+alias i18n_set_array='eval set --'
 
 _() { i18n_print "$@"; }
 n_() { i18n_nprint "$@"; }

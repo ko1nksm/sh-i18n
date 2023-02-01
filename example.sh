@@ -1,4 +1,5 @@
 #!/bin/sh
+# shellcheck shell=bash disable=SC2016
 
 set -eu
 
@@ -47,4 +48,3 @@ p_ 'URL' 'Path'
 np_ 'File' 'Path (%d)' 'Paths (%d)' 1
 np_ 'URL' 'Path (%d)' 'Paths (%d)' 2
 echo
-
