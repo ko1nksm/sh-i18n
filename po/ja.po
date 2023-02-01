@@ -18,88 +18,135 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 
-#: example.sh:14
+#: example.sh:15 example2.sh:19 example2.sh:24
 msgid "Hello World."
 msgstr "こんにちは世界。"
 
-#: example.sh:15
+#: example.sh:16
 msgid "Hello, %s."
 msgstr "こんにちは、%s。"
 
-#: example.sh:19
+#: example.sh:20
 msgid "Here is %d apple."
 msgid_plural "Here are %d apples."
 msgstr[0] "ここに %d 個のリンゴがあります。"
 msgstr[1] "ここに %d 個のリンゴがあります。"
 
-#: example.sh:20
+#: example.sh:21
 #, sh-format
 msgid "%2$s has %1$d apple."
 msgid_plural "%2$s has %1$d apples."
 msgstr[0] "%2$s は %1$d 個のリンゴを持っています。"
 msgstr[1] "%2$s は %1$d 個のリンゴを持っています。"
 
-#: example.sh:24
+#: example.sh:25
 msgid "Here is a tab =>\t<=."
 msgstr "ここにはタブ =>\t<= があります。"
 
-#: example.sh:25
+#: example.sh:26
 msgid "It's a small world.\n"
 msgstr "世界は小さい。\n"
 
-#: example.sh:29
+#: example.sh:30
 msgid "The distance from the earth to the sun is %'d km."
 msgstr "地球から太陽までの距離は %'d km です。"
 
-#: example.sh:30
+#: example.sh:31
 msgid "PI is %f."
 msgstr "円周率は %f です。"
 
-#: example.sh:34
+#: example.sh:35
 msgid "$100 is about %'d Japanese yen."
 msgstr "$100 ドルは日本円でおよそ %'d 円です。"
 
-#: example.sh:38
+#: example.sh:39
 msgid "File|Path"
 msgstr "ファイルパス"
 
-#: example.sh:39
+#: example.sh:40
 msgid "URL|Path"
 msgstr "URLパス"
 
-#: example.sh:40
+#: example.sh:41
 msgid "File|Path (%d)"
 msgid_plural "Paths (%d)"
 msgstr[0] "ファイルパス (%d)"
 msgstr[1] "ファイルパス (%d)"
 
-#: example.sh:41
+#: example.sh:42
 msgid "URL|Path (%d)"
 msgid_plural "Paths (%d)"
 msgstr[0] "URLパス (%d)"
 msgstr[1] "URLパス (%d)"
 
-#: example.sh:45
+#: example.sh:46
 msgctxt "File"
 msgid "Path"
 msgstr "ファイルパス"
 
-#: example.sh:46
+#: example.sh:47
 msgctxt "URL"
 msgid "Path"
 msgstr "URLパス"
 
-#: example.sh:47
+#: example.sh:48
 msgctxt "File"
 msgid "Path (%d)"
 msgid_plural "Paths (%d)"
 msgstr[0] "ファイルパス (%d)"
 msgstr[1] "ファイルパス (%d)"
 
-#: example.sh:48
+#: example.sh:49
 msgctxt "URL"
 msgid "Path (%d)"
 msgid_plural "Paths (%d)"
 msgstr[0] "URLパス (%d)"
 msgstr[1] "URLパス (%d)"
 
+#: example2.sh:31
+msgid "Positional Parameters 1"
+msgstr "位置パラメータ 1"
+
+#: example2.sh:32
+msgid "Positional Parameters 2"
+msgstr "位置パラメータ 2"
+
+#: example2.sh:33
+msgid "Positional Parameters 3"
+msgstr "位置パラメータ 3"
+
+#: example2.sh:44
+msgid "Variable Array 1"
+msgstr "変数配列 1"
+
+#: example2.sh:45
+msgid "Variable Array 2"
+msgstr "変数配列 2"
+
+#: example2.sh:46
+msgid "Variable Array 3"
+msgstr "変数配列 3"
+
+#: example2.sh:62
+msgid "Array 1"
+msgstr "配列 1"
+
+#: example2.sh:63
+msgid "Array 2"
+msgstr "配列 2"
+
+#: example2.sh:64
+msgid "Array 3"
+msgstr "配列 3"
+
+#: example2.sh:80
+msgid "Associative Array 1"
+msgstr "連想配列 1"
+
+#: example2.sh:81
+msgid "Associative Array 2"
+msgstr "連想配列 2"
+
+#: example2.sh:82
+msgid "Associative Array 3"
+msgstr "連想配列 3"
