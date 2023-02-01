@@ -119,7 +119,7 @@ Shells that we have decided not to support due to shell bugs:
 
 Functions
 
-| Basic                                   | Context (p)                                 | (s)                                         |
+| Basic                                   | Context (p)                                 | Scope (s)                                   |
 | --------------------------------------- | ------------------------------------------- | ------------------------------------------- |
 | [i18n_print ( _ )](#i18n_print--_-)     | [i18n_pprint ( p_ )](#i18n_pprint--p_-)     | [i18n_sprint ( s_ )](#i18n_sprint--s_-)     |
 | [i18n_nprint ( n_ )](#i18n_nprint--n_-) | [i18n_npprint ( np_ )](#i18n_npprint--np_-) | [i18n_nsprint ( ns_ )](#i18n_nsprint--ns_-) |
