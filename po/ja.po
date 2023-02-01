@@ -57,7 +57,7 @@ msgstr "円周率は %f です。"
 
 #: example.sh:34
 msgid "$100 is about %'d Japanese yen."
-msgstr "$100 ドルは日本円でおそよ %'d 円です。"
+msgstr "$100 ドルは日本円でおよそ %'d 円です。"
 
 #: example.sh:38
 msgid "File|Path"
