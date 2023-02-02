@@ -17,6 +17,9 @@ fi
 
 echo "==== N_ ===="
 N_ "Hello World."
+for i in "$@"; do
+  _ "$i"
+done
 echo
 echo
 
