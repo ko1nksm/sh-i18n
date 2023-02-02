@@ -168,7 +168,7 @@ i18n__sgettext() {
   i18n_work=$(i18n__native_gettext "$2" && echo x)
   set -- "$1" "$2" "${i18n_work%x}"
   unset i18n_work
-  [ "$2" = "$3" ] && set -- "$1" "$2" "${3##*|}"
+  [ "$2" = "$3" ] && set -- "$1" "$2" "${3#*|}"
   eval "$1=\$3"
 }
 
@@ -176,7 +176,7 @@ i18n__nsgettext() {
   i18n_work=$(i18n__native_ngettext "$2" "$3" "$4" && echo x)
   set -- "$1" "$2" "$3" "$4" "${i18n_work%x}"
   unset i18n_work
-  [ "$2" = "$5" ] && set -- "$1" "$2" "$3" "$4" "${5##*|}"
+  [ "$2" = "$5" ] && set -- "$1" "$2" "$3" "$4" "${5#*|}"
   eval "$1=\$5"
 }
 
