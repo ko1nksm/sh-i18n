@@ -128,13 +128,14 @@ Gettext Functions
 
 Gettext Helper (experimental)
 
-- i18n_gettext_noop (`N_`)
-- i18n_gettext_s2v (`S_`)
-- i18n_gettext_a2v (`V_`)
-- i18n_gettext_a2a (`A_`)
-- i18n_gettext_a2aa (`AA_`)
-- `i18n_set_array`
-- `@_`
+- [i18n_build_array](#i18n_build_array)
+- [i18n_set_array](#i18n_set_array)
+- [i18n_gettext_noop ( N_ )](#i18n_gettext_noop--n_-)
+- [i18n_gettext_s2v ( S_ )](#i18n_gettext_s2v--s_-)
+- [i18n_gettext_a2p ( @_ )](#i18n_gettext_a2p--_-_)
+- [i18n_gettext_a2v ( V_ )](#i18n_gettext_a2v--v_-)
+- [i18n_gettext_a2a ( A_ )](#i18n_gettext_a2a--a_-)
+- [i18n_gettext_a2aa ( AA_ )](#i18n_gettext_a2aa--aa_-)
 
 Utilities
 
@@ -209,7 +210,9 @@ _ $'It\047s a small world\n'
 
 Despite this limitation, we believe it is more convenient to make Dollar-Single-Quote available because messages often contain tabs and newlines.
 
-### i18n_print ( _ )
+### Gettext Functions
+
+#### i18n_print ( _ )
 
 ```txt
 _ MSGID [-n | --] [ARGUMENT]...
@@ -222,7 +225,7 @@ The second argument is a flag, specify `-n` or `--`. If `-n` is specified, suppr
 
 If the MSGID contains the `%` format, the arguments are expanded and the value passed in ARGUMENT is assigned. See `i18n_printf` for about format.
 
-### i18n_nprint ( n_ )
+#### i18n_nprint ( n_ )
 
 ```txt
 n_ MSGID MSGID-PLURAL [-n | --] N [ARGUMENT]...
@@ -237,35 +240,35 @@ If the fourth argument is `1`, MSGID is used as the message; if it is not `1`, M
 
 If the MSGID contains the `%` format, the arguments are expanded and the value passed in ARGUMENT is assigned. See `i18n_printf` for about format.
 
-### i18n_sprint ( s_ )
+#### i18n_sprint ( s_ )
 
 ```txt
-s_ MSGID [-n | --] [ARGUMENT]...
-i18n_sprint MSGID [-n | --] [ARGUMENT]...
+s_ SCOPE'|'MSGID [-n | --] [ARGUMENT]...
+i18n_sprint SCOPE'|'MSGID [-n | --] [ARGUMENT]...
 ```
 
-### i18n_nsprint ( ns_ )
+#### i18n_nsprint ( ns_ )
 
 ```txt
-ns_ MSGID MSGID-PLURAL [-n | --] N [ARGUMENT]...
-i18n_nsprint MSGID MSGID-PLURAL [-n | --] N [ARGUMENT]...
+ns_ SCOPE'|'MSGID MSGID-PLURAL [-n | --] N [ARGUMENT]...
+i18n_nsprint SCOPE'|'MSGID MSGID-PLURAL [-n | --] N [ARGUMENT]...
 ```
 
-### i18n_pprint ( p_ )
+#### i18n_pprint ( p_ )
 
 ```txt
 p_ MSGCTXT MSGID [-n | --] [ARGUMENT]...
 i18n_pprint MSGCTXT MSGID [-n | --] [ARGUMENT]...
 ```
 
-### i18n_npprint ( np_ )
+#### i18n_npprint ( np_ )
 
 ```txt
 np_ MSGCTXT MSGID MSGID-PLURAL [-n | --] N [ARGUMENT]...
 i18n_npprint MSGCTXT MSGID MSGID-PLURAL [-n | --] N [ARGUMENT]...
 ```
 
-### i18n_gettext
+#### i18n_gettext
 
 ```txt
 i18n_gettext VARNAME MSGID
@@ -273,7 +276,7 @@ i18n_gettext VARNAME MSGID
 
 Get the specified MSGID and assign it to the variable specified by VARNAME. Options are not available and escape sequences are not interpreted　as with `gettext -E`.
 
-### i18n_ngettext
+#### i18n_ngettext
 
 ```txt
 i18n_ngettext VARNAME MSGID MSGID-PLURAL N
@@ -281,31 +284,196 @@ i18n_ngettext VARNAME MSGID MSGID-PLURAL N
 
 Get the specified MSGID and assign it to the variable specified by VARNAME. Options are not available and escape sequences are not interpreted　as with `ngettext -E`.
 
-### i18n_sgettext
+#### i18n_sgettext
 
 ```txt
-i18n_sgettext VARNAME MSGID
+i18n_sgettext VARNAME SCOPE'|'MSGID
 ```
 
-### i18n_nsgettext
+#### i18n_nsgettext
 
 ```txt
-i18n_nsgettext VARNAME MSGID MSGID-PLURAL N
+i18n_nsgettext VARNAME SCOPE'|'MSGID MSGID-PLURAL N
 ```
 
-### i18n_pgettext
+#### i18n_pgettext
 
 ```txt
 i18n_pgettext VARNAME MSGCTXT MSGID
 ```
 
-### i18n_npgettext
+#### i18n_npgettext
 
 ```txt
 i18n_npgettext VARNAME MSGCTXT MSGID MSGID-PLURAL N
 ```
 
-### i18n_printf
+### Gettext Helpers
+
+Used to assign MSGID to a variable.
+
+#### i18n_build_array
+
+```txt
+i18n_build_array VARNAME
+```
+
+Used to build variable arrays, arrays, and associative arrays. See below.
+
+```sh
+typeset -a ary
+i18n_build_array ary
+{
+  A_ "Array 1"
+  A_ "Array 2"
+  A_ "Array 3"
+}
+
+for i in "${ary[@]}"; do
+  _ "$i"
+done
+```
+
+#### i18n_set_array
+
+```txt
+i18n_build_array VARIABLE
+```
+
+Used to make positional parameters from an array of variables. Please refer to the `i18n_gettext_a2v` ( `V_` ) example.
+
+#### i18n_gettext_noop ( N_ )
+
+```txt
+N_ MSGID
+```
+
+It works like the `N_` macro in other languages, but is difficult to use in the shell for two reasons:
+
+- Consecutive trailing newlines disappear when used with command substitution
+- Command substitution is poor performance
+
+However, the following example works fine.
+
+```sh
+var=$(N_ "Apple")
+_ "$var"
+
+set -- "$(N_ "Apple")" "$(N_ "Banana")" "$(N_ "Orange")"
+for i in "$@"; do
+  _ "$i"
+done
+
+ary=("$(N_ "Apple")" "$(N_ "Banana")" "$(N_ "Orange")")
+for i in "${ary[@]}"; do
+  _ "$i"
+done
+```
+
+#### i18n_gettext_s2v ( S_ )
+
+```txt
+S_ VARNAME MSGID
+```
+
+Store the MSGID to the variable.
+
+```sh
+S_ var "Hello World."
+_ "$var"
+```
+
+#### i18n_gettext_a2p ( @_ )
+
+```txt
+@_ MSGID
+```
+
+Add MSGID to the position parameters.
+
+```sh
+set --
+{
+  @_ "Positional Parameters 1"
+  @_ "Positional Parameters 2"
+  @_ "Positional Parameters 3"
+}
+for i in "$@"; do
+  _ "$i"
+done
+```
+
+**NOTE** Because of the dependence on `alias` command, please execute `shopt -s expand_aliases` in bash to make `alias` available.
+
+#### i18n_gettext_a2v ( V_ )
+
+```txt
+V_ MSGID
+```
+
+Stores multiple MSGIDs in a single variable. When used, use `i18n_set_array` to set it to the position parameters.
+
+```sh
+var=''
+i18n_build_array var
+{
+  V_ "Variable Array 1"
+  V_ "Variable Array 2"
+  V_ "Variable Array 3"
+}
+i18n_set_array "$var"
+for i in "$@"; do
+  _ "$i"
+done
+```
+
+**NOTE** Because of the dependence on `alias` command, please execute `shopt -s expand_aliases` in bash to make `alias` available.
+
+#### i18n_gettext_a2a ( A_ )
+
+```txt
+A_ MSGID
+```
+
+Stores multiple MSGIDs in a single array. Requires array support in the shell.
+
+```sh
+typeset -a ary
+i18n_build_array ary
+{
+  A_ "Array 1"
+  A_ "Array 2"
+  A_ "Array 3"
+}
+for i in "${ary[@]}"; do
+  _ "$i"
+done
+```
+
+#### i18n_gettext_a2aa ( AA_ )
+
+```txt
+AA_ KEY MSGID
+```
+
+Stores multiple MSGIDs in a single associative array. Requires associative array support in the shell.
+
+```sh
+typeset -A aary
+i18n_build_array aary
+{
+  AA_ key1 "Associative Array 1"
+  AA_ key2 "Associative Array 2"
+  AA_ key3 "Associative Array 3"
+}
+for i in "${aary[@]}"; do
+  _ "$i"
+done
+```
+
+### Utilities
+
+#### i18n_printf
 
 ```txt
 i18n_printf FORMAT [ARGUMENT]...
@@ -320,7 +488,7 @@ The values passed in ARGUMENT is expanded according to FORMAT. It internally exe
 - Arguments remaining after FORMAT consumes arguments are ignored
 - If the argument referenced by FORMAT does not exist, the format remains in place
 
-### i18n_printfln
+#### i18n_printfln
 
 ```txt
 i18n_printfln FORMAT [ARGUMENT]...
@@ -328,7 +496,7 @@ i18n_printfln FORMAT [ARGUMENT]...
 
 Same as `i18n_printf` except for the addition of a newline at the end of the output.
 
-### i18n_echo
+#### i18n_echo
 
 ```txt
 i18n_echo STRING
@@ -345,7 +513,7 @@ $echo foo
 
 For more information on `$echo`, see [here](https://www.gnu.org/software/gettext/manual/html_node/gettext_002esh.html).
 
-### i18n_detect_decimal_point
+#### i18n_detect_decimal_point
 
 ```txt
 i18n_detect_decimal_point STRING
