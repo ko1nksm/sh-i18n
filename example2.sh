@@ -56,7 +56,11 @@ if ! { typeset -a ary || array ary; } 2>/dev/null; then
   echo "abort: array not supported."
   exit 0
 fi
-typeset -a ary
+if [ "${YASH_VERSION:-}" ]; then
+  array ary
+else
+  typeset -a ary 2>/dev/null
+fi
 i18n_build_array ary
 {
   A_ "Array 1"
@@ -67,7 +71,6 @@ for i in "${ary[@]}"; do
   _ "$i"
 done
 echo
-
 
 echo "==== AA_ ===="
 if ! typeset -A aary 2>/dev/null; then
