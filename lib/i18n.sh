@@ -505,6 +505,7 @@ S_() { i18n_gettext_s2v "$@"; }
 V_() { i18n_gettext_a2v "$@"; }
 A_() { i18n_gettext_a2a "$@"; }
 AA_() { i18n_gettext_a2aa "$@"; }
+alias i18n_gettext_a2p='set -- "$@"'
 alias @_='set -- "$@"'
 alias i18n_set_array='eval set --'
 
