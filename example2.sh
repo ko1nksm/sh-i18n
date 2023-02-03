@@ -16,11 +16,8 @@ if [ "${BASH_VERSION:-}" ]; then
 fi
 
 echo "==== N_ ===="
-N_ "Hello World."
-for i in "$@"; do
-  _ "$i"
-done
-echo
+var=$(N_ "Hello World.")
+_ "$var"
 echo
 
 echo "==== S_ ===="

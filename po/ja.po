@@ -131,22 +131,22 @@ msgstr "変数配列 3"
 msgid "Array 1"
 msgstr "配列 1"
 
-#: example2.sh:63
+#: example2.sh:67
 msgid "Array 2"
 msgstr "配列 2"
 
-#: example2.sh:64
+#: example2.sh:68
 msgid "Array 3"
 msgstr "配列 3"
 
-#: example2.sh:80
+#: example2.sh:83
 msgid "Associative Array 1"
 msgstr "連想配列 1"
 
-#: example2.sh:81
+#: example2.sh:84
 msgid "Associative Array 2"
 msgstr "連想配列 2"
 
-#: example2.sh:82
+#: example2.sh:85
 msgid "Associative Array 3"
 msgstr "連想配列 3"
